@@ -65,9 +65,3 @@ export function removeMyCompetition(
   );
 
 }
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(newList)
-  );
-
-}
