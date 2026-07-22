@@ -7,9 +7,11 @@ export function Home() {
   return (
     <Space direction="vertical" size={designTokens.spacing.xl} style={{ width: '100%' }}>
       <Card style={{ borderRadius: designTokens.borderRadius, boxShadow: designTokens.boxShadow }}>
-        <Typography.Title>找到真正适合你的竞赛</Typography.Title>
-        <Typography.Paragraph type="secondary">根据专业、兴趣、技能水平、时间安排与目标，快速获得竞赛推荐。</Typography.Paragraph>
-        <Button type="primary" size="large">开始 AI 推荐</Button>
+        <Typography.Title>AI竞赛规划智能体</Typography.Title>
+<Typography.Paragraph type="secondary">
+  告诉AI你的专业背景、兴趣方向和竞赛目标，智能分析你的情况，为你推荐适合的竞赛并提供规划建议。
+</Typography.Paragraph>
+<Button type="primary" size="large">开始AI规划</Button>
       </Card>
       <Typography.Title level={3}>热门竞赛</Typography.Title>
       <Row gutter={[designTokens.spacing.lg, designTokens.spacing.lg]}>
