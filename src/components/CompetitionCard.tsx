@@ -1,5 +1,5 @@
 import { Button, Card, Space, Typography, message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Competition } from '../services/competitions';
 import {
@@ -29,6 +29,7 @@ export function CompetitionCard({
 }: CompetitionCardProps) {
 
 
+
   const [joined, setJoined] = useState(
 
     getMyCompetitions().some(
@@ -39,62 +40,149 @@ export function CompetitionCard({
 
 
 
+  // 监听加入/移除竞赛，实时更新按钮状态
+  useEffect(() => {
+
+
+    const updateJoined = () => {
+
+
+      setJoined(
+
+        getMyCompetitions().some(
+          item => item.id === competition.id
+        )
+
+      );
+
+
+    };
+
+
+
+    window.addEventListener(
+      'competitionChange',
+      updateJoined
+    );
+
+
+
+    return () => {
+
+
+      window.removeEventListener(
+        'competitionChange',
+        updateJoined
+      );
+
+
+    };
+
+
+  }, [competition.id]);
+
+
+
+
+
   const handleAdd = () => {
 
 
     if (joined) {
 
-      message.info('该竞赛已经加入我的竞赛');
+
+      message.info(
+        '该竞赛已经加入我的竞赛'
+      );
+
 
       return;
+
 
     }
 
 
-    addMyCompetition(competition);
+
+    addMyCompetition(
+      competition
+    );
+
 
 
     setJoined(true);
 
 
-    message.success('已加入我的竞赛');
+
+    // 通知其他页面更新
+    window.dispatchEvent(
+      new Event('competitionChange')
+    );
+
+
+
+    message.success(
+      '已加入我的竞赛'
+    );
+
 
   };
+
+
 
 
 
   return (
 
     <Card
+
       style={{
+
         borderRadius: designTokens.borderRadius,
+
         boxShadow: designTokens.boxShadow,
+
         height:'100%'
+
       }}
+
     >
 
 
       <Space
+
         direction="vertical"
+
         size={designTokens.spacing.sm}
+
         style={{
+
           width:'100%'
+
         }}
+
       >
+
 
 
         <Space wrap>
 
 
           <CompetitionTag
+
             type={statusType[competition.status]}
+
           >
+
             {competition.status}
+
           </CompetitionTag>
 
 
+
           <CompetitionTag>
+
             {competition.difficulty}
+
           </CompetitionTag>
 
 
@@ -103,11 +191,17 @@ export function CompetitionCard({
 
 
 
+
         <Typography.Title
+
           level={4}
+
           style={{
+
             margin:0
+
           }}
+
         >
 
           {competition.name}
@@ -117,8 +211,11 @@ export function CompetitionCard({
 
 
 
+
         <Typography.Paragraph
+
           type="secondary"
+
         >
 
           {competition.summary}
@@ -136,8 +233,11 @@ export function CompetitionCard({
             competition.tags.map(tag => (
 
               <CompetitionTag
+
                 key={tag}
+
                 type="primary"
+
               >
 
                 {tag}
@@ -155,7 +255,9 @@ export function CompetitionCard({
 
 
         <Typography.Text
+
           type="secondary"
+
         >
 
           截止时间：{competition.deadline}
@@ -191,9 +293,13 @@ export function CompetitionCard({
           >
 
             {
+
               joined
+
                 ? '✓ 已加入'
+
                 : '加入我的竞赛'
+
             }
 
 
@@ -227,5 +333,7 @@ export function CompetitionCard({
     </Card>
 
   );
+
+}
 
 }
