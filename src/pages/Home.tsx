@@ -13,7 +13,7 @@ export function Home() {
 </Typography.Paragraph>
 <Button type="primary" size="large">开始AI规划</Button>
       </Card>
-      <Typography.Title level={3}>热门竞赛</Typography.Title>
+      <Typography.Title level={3}>智能体推荐结果展示</Typography.Title>
       <Row gutter={[designTokens.spacing.lg, designTokens.spacing.lg]}>
         {competitions.map((competition) => (
           <Col xs={24} md={8} key={competition.id}><CompetitionCard competition={competition} /></Col>
