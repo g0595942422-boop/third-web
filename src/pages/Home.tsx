@@ -23,12 +23,22 @@ export function Home() {
 
 
   // 首页展示热门竞赛
-  const hotCompetitions = competitions.slice(0,3);
   const hotCompetitions = competitions.slice(0, 3);
 
 
 
-@@ -41,23 +42,34 @@
+  return (
+
+    <Space
+
+      direction="vertical"
+
+      size={designTokens.spacing.xl}
+
+      style={{
+        width:'100%'
+      }}
+
     >
 
 
@@ -38,8 +48,6 @@ export function Home() {
       <Card
 
         style={{
-          borderRadius:designTokens.borderRadius,
-          boxShadow:designTokens.boxShadow
 
           borderRadius:
             designTokens.borderRadius,
@@ -65,7 +73,8 @@ export function Home() {
           <Typography.Title level={1}>
 
             AI竞赛智能推荐平台
-@@ -66,6 +78,7 @@
+
+          </Typography.Title>
 
 
 
@@ -73,7 +82,10 @@ export function Home() {
           <Typography.Paragraph type="secondary">
 
             汇聚大学生热门竞赛资源，
-@@ -76,6 +89,7 @@
+            帮助你快速发现适合自己的比赛，
+            并通过AI规划提升参赛效率。
+
+          </Typography.Paragraph>
 
 
 
@@ -81,7 +93,15 @@ export function Home() {
           <Button
 
             type="primary"
-@@ -91,6 +105,7 @@
+
+            icon={<RobotOutlined />}
+
+            href="#/ai"
+
+          >
+
+            开始AI竞赛规划
+
           </Button>
 
 
@@ -89,7 +109,9 @@ export function Home() {
         </Space>
 
 
-@@ -100,6 +115,8 @@
+      </Card>
+
+
 
 
 
@@ -98,11 +120,20 @@ export function Home() {
       {/* 热门竞赛 */}
 
       <div>
-@@ -117,25 +134,32 @@
+
+
+        <Typography.Title level={3}>
+
+          <TrophyOutlined />
+
+          热门竞赛
+
+        </Typography.Title>
+
+
 
         <Typography.Paragraph type="secondary">
 
-          当前热门赛事推荐，快速了解比赛方向
           当前热门赛事推荐，快速了解比赛方向。
 
         </Typography.Paragraph>
@@ -132,7 +163,14 @@ export function Home() {
               competition => (
 
 
-@@ -150,21 +174,27 @@
+                <Col
+
+                  xs={24}
+
+                  md={8}
+
+                  key={competition.id}
+
                 >
 
 
@@ -160,7 +198,19 @@ export function Home() {
                     <Space
 
                       direction="vertical"
-@@ -184,12 +214,15 @@
+
+                      size="small"
+
+                    >
+
+
+
+                      <Tag color="blue">
+
+                        {competition.status}
+
+                      </Tag>
+
 
 
 
@@ -176,7 +226,12 @@ export function Home() {
                         }}
 
                       >
-@@ -202,6 +235,7 @@
+
+                        {competition.name}
+
+
+                      </Typography.Title>
+
 
 
 
@@ -184,7 +239,18 @@ export function Home() {
                       <Typography.Paragraph
 
                         type="secondary"
-@@ -220,13 +254,15 @@
+
+                      >
+
+                        {competition.summary}
+
+
+                      </Typography.Paragraph>
+
+
+
+
+
                       <Typography.Text>
 
                         截止时间：
@@ -200,56 +266,90 @@ export function Home() {
                       <Button
 
                         type="primary"
-@@ -271,7 +307,9 @@
+
+                        href={competition.officialUrl}
+
+                        target="_blank"
+
+                      >
+
+                        查看竞赛详情
+
+                      </Button>
 
 
 
-      {/* AI入口 */}
+                    </Space>
+
+
+                  </Card>
+
+
+
+                </Col>
+
+
+              )
+
+            )
+
+          }
+
+
+
+        </Row>
+
+
+
+      </div>
+
+
+
+
+
 
 
       {/* 平台特色 */}
 
       <Card
 
-@@ -288,42 +326,131 @@
+        style={{
+
+          borderRadius:
+            designTokens.borderRadius,
+
+          boxShadow:
+            designTokens.boxShadow
+
+        }}
+
       >
 
 
 
         <Typography.Title level={3}>
 
-          不知道参加哪个竞赛？
           平台特色
 
         </Typography.Title>
 
 
 
-        <Typography.Paragraph type="secondary">
 
-          输入你的专业、兴趣和目标，
-          AI将为你分析适合的竞赛方向。
-
-        </Typography.Paragraph>
 
         <Row
 
           gutter={[
 
-        <Button
             designTokens.spacing.lg,
 
-          type="primary"
             designTokens.spacing.lg
 
-          icon={<RobotOutlined />}
           ]}
 
         >
 
-          使用AI推荐
 
-        </Button>
 
           <Col
 
@@ -353,3 +453,7 @@ export function Home() {
 
     </Space>
 
+
+  );
+
+}
