@@ -24,7 +24,7 @@ export function getMyCompetitions(): Competition[] {
 // 添加竞赛
 export function addMyCompetition(
   competition: Competition
-){
+) {
 
   const list = getMyCompetitions();
 
@@ -34,7 +34,7 @@ export function addMyCompetition(
   );
 
 
-  if(!exists){
+  if (!exists) {
 
     list.push(competition);
 
@@ -50,10 +50,10 @@ export function addMyCompetition(
 
 
 
-// 删除竞赛
+// 移除竞赛
 export function removeMyCompetition(
-  id:string
-){
+  id: string
+) {
 
   const list = getMyCompetitions();
 
