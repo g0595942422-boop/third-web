@@ -28,7 +28,9 @@ export function SearchBox() {
         <br />
         · 可投入时间（例如：1个月、3个月、半年）
         <br />
-        · 参赛目标（例如：获奖、科研、就业）
+        · 参赛目标（例如：获奖、科研、就业、留学、保研）
+          <br />
+        · 拥有的技能（例如：python、c++、stata）
       </Typography.Paragraph>
 
 
