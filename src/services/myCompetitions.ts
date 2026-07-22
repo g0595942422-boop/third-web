@@ -3,16 +3,13 @@ import { Competition } from './competitions';
 const STORAGE_KEY = 'myCompetitions';
 
 
-// 获取我的竞赛
 export function getMyCompetitions(): Competition[] {
 
   const data = localStorage.getItem(STORAGE_KEY);
 
-
   if (!data) {
     return [];
   }
-
 
   return JSON.parse(data);
 
@@ -20,7 +17,6 @@ export function getMyCompetitions(): Competition[] {
 
 
 
-// 添加竞赛
 export function addMyCompetition(
   competition: Competition
 ) {
@@ -50,7 +46,7 @@ export function addMyCompetition(
 
 
 
-// 删除竞赛
+
 export function removeMyCompetition(
   id:number
 ) {
@@ -67,7 +63,5 @@ export function removeMyCompetition(
     STORAGE_KEY,
     JSON.stringify(newList)
   );
-
-}
 
 }
