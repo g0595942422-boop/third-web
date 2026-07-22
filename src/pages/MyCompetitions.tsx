@@ -7,7 +7,6 @@ import {
 } from '../services/myCompetitions';
 
 
-
 export function MyCompetitions() {
 
 
@@ -17,10 +16,10 @@ export function MyCompetitions() {
 
 
 
-  // 每次进入页面重新读取数据
+  // 实时监听竞赛变化
   useEffect(() => {
 
- 
+
     const updateCompetitions = () => {
 
       setMyCompetitions(
@@ -30,22 +29,40 @@ export function MyCompetitions() {
     };
 
 
+    // 初次进入读取
     updateCompetitions();
 
 
-    // 页面重新获得焦点时刷新
+
+    // 浏览器重新获得焦点时刷新
     window.addEventListener(
       'focus',
       updateCompetitions
     );
 
 
+    // 加入/移除竞赛时实时刷新
+    window.addEventListener(
+      'competitionChange',
+      updateCompetitions
+    );
+
+
+
     return () => {
+
 
       window.removeEventListener(
         'focus',
         updateCompetitions
       );
+
+
+      window.removeEventListener(
+        'competitionChange',
+        updateCompetitions
+      );
+
 
     };
 
@@ -62,6 +79,7 @@ export function MyCompetitions() {
     removeMyCompetition(id);
 
 
+    // 立即更新当前页面
     setMyCompetitions(
       getMyCompetitions()
     );
@@ -112,6 +130,7 @@ export function MyCompetitions() {
 
 
         columns={[
+
 
 
           {
@@ -182,7 +201,7 @@ export function MyCompetitions() {
 
                 danger
 
-                onClick={()=>
+                onClick={() =>
                   handleRemove(record.id)
                 }
 
