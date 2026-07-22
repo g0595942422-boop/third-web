@@ -21,8 +21,6 @@ import {
 
 import { designTokens } from "../styles/tokens";
 
-
-
 interface AIRecommendationCardProps {
 
   competition: Competition;
