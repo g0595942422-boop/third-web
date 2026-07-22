@@ -15,7 +15,7 @@ import {
 
 import { useRef, useState } from "react";
 
-import { CompetitionCard } from "../components/CompetitionCard";
+import { AIRecommendationCard } from "../components/AIRecommendationCard";
 import { competitions } from "../services/competitions";
 import { designTokens } from "../styles/tokens";
 
@@ -184,9 +184,7 @@ export function AIRecommendation() {
                           background:"#f5f5f5"
                         }}
                       >
-
                         AI正在分析你的竞赛方向...
-
                       </div>
 
                     </div>
@@ -238,7 +236,8 @@ export function AIRecommendation() {
 
 
 
-        {/* 右侧推荐保持原样 */}
+
+        {/* 右侧AI推荐 */}
 
         <Col xs={24} md={14}>
 
@@ -251,8 +250,10 @@ export function AIRecommendation() {
           >
 
             <Typography.Paragraph type="secondary">
+
               AI根据你的背景和目标，
               推荐适合你的竞赛方向。
+
             </Typography.Paragraph>
 
 
@@ -265,7 +266,7 @@ export function AIRecommendation() {
 
               {
                 competitions.slice(0,4).map(
-                  competition=>(
+                  (competition,index)=>(
 
                     <Col
                       xs={24}
@@ -273,8 +274,17 @@ export function AIRecommendation() {
                       key={competition.id}
                     >
 
-                      <CompetitionCard
+                      <AIRecommendationCard
                         competition={competition}
+                        score={
+                          index===0
+                          ?95
+                          :index===1
+                          ?90
+                          :index===2
+                          ?88
+                          :85
+                        }
                       />
 
                     </Col>
@@ -287,6 +297,7 @@ export function AIRecommendation() {
 
 
           </Card>
+
 
         </Col>
 
