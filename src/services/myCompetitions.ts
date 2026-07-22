@@ -1,19 +1,15 @@
 import { Competition } from './competitions';
 
+const STORAGE_KEY = 'myCompetitions';
 
-const STORAGE_KEY = "myCompetitions";
 
-
-// 获取我的竞赛
 export function getMyCompetitions(): Competition[] {
 
   const data = localStorage.getItem(STORAGE_KEY);
 
-
   if (!data) {
     return [];
   }
-
 
   return JSON.parse(data);
 
@@ -21,7 +17,6 @@ export function getMyCompetitions(): Competition[] {
 
 
 
-// 添加竞赛
 export function addMyCompetition(
   competition: Competition
 ) {
@@ -34,25 +29,26 @@ export function addMyCompetition(
   );
 
 
-  if (!exists) {
-
-    list.push(competition);
-
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(list)
-    );
-
+  if (exists) {
+    return;
   }
+
+
+  list.push(competition);
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(list)
+  );
 
 }
 
 
 
-// 移除竞赛
+
 export function removeMyCompetition(
-  id: string
+  id:number
 ) {
 
   const list = getMyCompetitions();
@@ -63,6 +59,12 @@ export function removeMyCompetition(
   );
 
 
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(newList)
+  );
+
+}
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(newList)
