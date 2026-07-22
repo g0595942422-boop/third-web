@@ -1,7 +1,9 @@
 import { Table, Typography, Tag } from 'antd';
-import { myCompetitions } from '../services/myCompetitions';
+import { getMyCompetitions } from '../services/myCompetitions';
 
 export function MyCompetitions() {
+
+  const myCompetitions = getMyCompetitions();
 
   return (
     <>
