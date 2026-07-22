@@ -13,9 +13,11 @@ import {
   SendOutlined,
 } from "@ant-design/icons";
 
+
 import { CompetitionCard } from "../components/CompetitionCard";
 import { competitions } from "../services/competitions";
 import { designTokens } from "../styles/tokens";
+
 
 
 export function AIRecommendation() {
@@ -36,6 +38,7 @@ export function AIRecommendation() {
     >
 
 
+
       <Typography.Title level={2}>
 
         AI竞赛规划助手
@@ -44,15 +47,24 @@ export function AIRecommendation() {
 
 
 
+
+
       <Row
 
-        gutter={designTokens.spacing.lg}
+        gutter={[
+          designTokens.spacing.lg,
+          designTokens.spacing.lg
+        ]}
+
+        align="stretch"
 
       >
 
 
 
-        {/* 左侧聊天区域 */}
+
+
+        {/* 左侧 AI聊天 */}
 
         <Col
 
@@ -61,6 +73,7 @@ export function AIRecommendation() {
           md={10}
 
         >
+
 
           <Card
 
@@ -87,7 +100,6 @@ export function AIRecommendation() {
           >
 
 
-
             <Space
 
               direction="vertical"
@@ -102,7 +114,11 @@ export function AIRecommendation() {
 
 
 
-              <Card size="small">
+              <Card
+
+                size="small"
+
+              >
 
                 <Typography.Text>
 
@@ -119,6 +135,7 @@ export function AIRecommendation() {
 
 
 
+
               <Card
 
                 size="small"
@@ -127,8 +144,10 @@ export function AIRecommendation() {
 
                 <Typography.Text type="secondary">
 
-                  例如：
-                  “我是计算机专业，希望参加AI相关比赛，提高科研能力”
+                  示例：
+
+                  我是计算机专业，希望参加AI相关比赛，
+                  提升科研和项目经验。
 
                 </Typography.Text>
 
@@ -141,11 +160,13 @@ export function AIRecommendation() {
 
               <Input.TextArea
 
-                rows={4}
+                rows={5}
 
                 placeholder="输入你的竞赛目标..."
 
               />
+
+
 
 
 
@@ -161,13 +182,11 @@ export function AIRecommendation() {
 
                 发送给AI分析
 
-
               </Button>
 
 
 
             </Space>
-
 
 
           </Card>
@@ -180,7 +199,9 @@ export function AIRecommendation() {
 
 
 
-        {/* 右侧推荐区域 */}
+
+
+        {/* 右侧推荐结果 */}
 
         <Col
 
@@ -214,55 +235,76 @@ export function AIRecommendation() {
 
 
 
-            <Space
+            <Typography.Paragraph
 
-              direction="vertical"
+              type="secondary"
 
-              size="large"
+            >
 
-              style={{
-                width:"100%"
-              }}
+              AI根据你的背景和目标，
+              推荐适合你的竞赛方向。
+
+            </Typography.Paragraph>
+
+
+
+
+
+            <Row
+
+              gutter={[
+
+                designTokens.spacing.lg,
+
+                designTokens.spacing.lg
+
+              ]}
 
             >
 
 
-              <Typography.Paragraph
-
-                type="secondary"
-
-              >
-
-                根据你的背景分析，
-                AI为你推荐以下竞赛方向。
-
-              </Typography.Paragraph>
-
-
-
-
 
               {
-                competitions.slice(0,2).map(
-                  competition=>(
 
-                    <CompetitionCard
+                competitions
+
+                .slice(0,4)
+
+                .map(
+
+                  competition => (
+
+
+                    <Col
+
+                      xs={24}
+
+                      sm={12}
 
                       key={competition.id}
 
-                      competition={competition}
+                    >
 
-                    />
+
+                      <CompetitionCard
+
+                        competition={competition}
+
+                      />
+
+
+                    </Col>
 
 
                   )
 
                 )
+
               }
 
 
 
-            </Space>
+            </Row>
 
 
 
@@ -273,7 +315,9 @@ export function AIRecommendation() {
 
 
 
+
       </Row>
+
 
 
     </Space>
