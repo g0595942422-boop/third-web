@@ -15,15 +15,12 @@ import {
 
 import { useRef, useState } from "react";
 
-import { AIRecommendationCard } from "../components/AIRecommendationCard";
+import { CompetitionCard } from "../components/CompetitionCard";
 import { competitions } from "../services/competitions";
 import { designTokens } from "../styles/tokens";
 
-
 export function AIRecommendation() {
-
   const [input,setInput]=useState("");
-
   const inputRef=useRef<any>(null);
 
   const [messages,setMessages]=useState([
@@ -35,9 +32,7 @@ export function AIRecommendation() {
 
   const [loading,setLoading]=useState(false);
 
-
   const handleSend=()=>{
-
     if(!input.trim()) return;
 
     const message=input;
@@ -51,57 +46,44 @@ export function AIRecommendation() {
     ]);
 
     setInput("");
-
     setLoading(true);
 
-
     setTimeout(()=>{
-
       setLoading(false);
 
       setMessages(prev=>[
         ...prev,
         {
           role:"ai",
-          content:"根据你的情况，我建议关注人工智能创新、创新创业以及综合实践类竞赛，这些方向能够帮助你积累项目经验。"
+          content:"根据你的情况，我建议关注人工智能创新、创新创业以及综合实践类竞赛，这些方向能够帮助你积累项目经验，提高竞争力。"
         }
       ]);
-
     },1200);
-
 
     setTimeout(()=>{
       inputRef.current?.focus();
     },100);
-
   };
 
-
   return (
-
     <Space
       direction="vertical"
       size={designTokens.spacing.xl}
       style={{width:"100%"}}
     >
-
       <Typography.Title level={2}>
         AI竞赛规划助手
       </Typography.Title>
-
 
       <Row
         gutter={[
           designTokens.spacing.lg,
           designTokens.spacing.lg
         ]}
+        align="stretch"
       >
 
-
-        {/* 左侧AI聊天 */}
-
         <Col xs={24} md={10}>
-
           <Card
             title={
               <>
@@ -109,73 +91,56 @@ export function AIRecommendation() {
               </>
             }
             style={{
+              height:700,
               borderRadius:designTokens.borderRadius,
               boxShadow:designTokens.boxShadow
             }}
           >
-
             <Space
               direction="vertical"
               size="middle"
-              style={{width:"100%"}}
+              style={{
+                width:"100%"
+              }}
             >
 
               <div
                 style={{
-                  maxHeight:400,
-                  overflowY:"auto"
+                  height:460,
+                  overflowY:"auto",
+                  paddingRight:8
                 }}
               >
-
                 {
                   messages.map((item,index)=>(
-
                     <div
                       key={index}
                       style={{
                         display:"flex",
-                        justifyContent:
-                          item.role==="user"
-                          ?"flex-end"
-                          :"flex-start",
+                        justifyContent:item.role==="user"?"flex-end":"flex-start",
                         marginBottom:12
                       }}
                     >
-
                       <div
                         style={{
                           maxWidth:"80%",
                           padding:"10px 14px",
                           borderRadius:12,
-                          background:
-                            item.role==="user"
-                            ?"#e6f4ff"
-                            :"#f5f5f5"
+                          background:item.role==="user"?"#e6f4ff":"#f5f5f5"
                         }}
                       >
-
                         <Typography.Text>
                           {item.role==="ai"?"AI：":"你："}
                           {item.content}
                         </Typography.Text>
-
                       </div>
-
                     </div>
-
                   ))
                 }
 
-
                 {
-                  loading && (
-
-                    <div
-                      style={{
-                        marginBottom:12
-                      }}
-                    >
-
+                  loading&&(
+                    <div style={{marginBottom:12}}>
                       <div
                         style={{
                           display:"inline-block",
@@ -186,37 +151,24 @@ export function AIRecommendation() {
                       >
                         AI正在分析你的竞赛方向...
                       </div>
-
                     </div>
-
                   )
                 }
-
-
               </div>
-
 
               <Input.TextArea
                 ref={inputRef}
                 rows={4}
                 value={input}
-                onChange={
-                  e=>setInput(e.target.value)
-                }
-                onPressEnter={(e)=>{
-
+                onChange={e=>setInput(e.target.value)}
+                onPressEnter={e=>{
                   if(!e.shiftKey){
-
                     e.preventDefault();
-
                     handleSend();
-
                   }
-
                 }}
                 placeholder="输入你的专业、兴趣和竞赛目标..."
               />
-
 
               <Button
                 type="primary"
@@ -227,86 +179,55 @@ export function AIRecommendation() {
                 发送给AI分析
               </Button>
 
-
             </Space>
-
           </Card>
-
         </Col>
 
-
-
-
-        {/* 右侧AI推荐 */}
-
         <Col xs={24} md={14}>
-
           <Card
             title="AI推荐竞赛"
             style={{
+              height:700,
               borderRadius:designTokens.borderRadius,
               boxShadow:designTokens.boxShadow
             }}
           >
-
             <Typography.Paragraph type="secondary">
-
-              AI根据你的背景和目标，
-              推荐适合你的竞赛方向。
-
+              AI根据你的背景和目标，推荐适合你的竞赛方向。
             </Typography.Paragraph>
 
-
-            <Row
-              gutter={[
-                designTokens.spacing.lg,
-                designTokens.spacing.lg
-              ]}
+            <div
+              style={{
+                height:560,
+                overflowY:"auto",
+                paddingRight:8
+              }}
             >
-
-              {
-                competitions.slice(0,4).map(
-                  (competition,index)=>(
-
+              <Row
+                gutter={[
+                  designTokens.spacing.lg,
+                  designTokens.spacing.lg
+                ]}
+              >
+                {
+                  competitions.slice(0,4).map(competition=>(
                     <Col
                       xs={24}
                       sm={12}
                       key={competition.id}
                     >
-
-                      <AIRecommendationCard
+                      <CompetitionCard
                         competition={competition}
-                        score={
-                          index===0
-                          ?95
-                          :index===1
-                          ?90
-                          :index===2
-                          ?88
-                          :85
-                        }
                       />
-
                     </Col>
-
-                  )
-                )
-              }
-
-            </Row>
-
-
+                  ))
+                }
+              </Row>
+            </div>
           </Card>
-
-
         </Col>
 
-
       </Row>
-
-
     </Space>
-
   );
-
 }
