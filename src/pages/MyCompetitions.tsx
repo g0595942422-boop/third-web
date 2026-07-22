@@ -1,7 +1,7 @@
-import { Table, Typography, Tag, Button, message } from 'antd';
-import { useEffect, useState } from 'react';
-
-import {
+import { Table, Typography, Tag, Button } from 'antd';
+import { useState } from 'react';
+import { Competition } from '../services/competitions';
+import { 
   getMyCompetitions,
   removeMyCompetition
 } from '../services/myCompetitions';
@@ -10,12 +10,14 @@ import {
 export function MyCompetitions() {
 
 
-  const [myCompetitions, setMyCompetitions] = useState(
-    []
+  const [myCompetitions, setMyCompetitions] = useState<Competition[]>(
+    getMyCompetitions()
   );
 
 
-  const loadData = () => {
+  const handleRemove = (id: string) => {
+
+    removeMyCompetition(id);
 
     setMyCompetitions(
       getMyCompetitions()
@@ -24,72 +26,10 @@ export function MyCompetitions() {
   };
 
 
-
-  useEffect(() => {
-
-    loadData();
-
-  }, []);
-
-
-
-  // 页面重新进入时刷新
-  useEffect(() => {
-
-
-    const handleVisibility = () => {
-
-      if(document.visibilityState === 'visible'){
-
-        loadData();
-
-      }
-
-    };
-
-
-    document.addEventListener(
-      'visibilitychange',
-      handleVisibility
-    );
-
-
-    return () => {
-
-      document.removeEventListener(
-        'visibilitychange',
-        handleVisibility
-      );
-
-    };
-
-
-  }, []);
-
-
-
-
-  const handleRemove = (id:number)=>{
-
-
-    removeMyCompetition(id);
-
-
-    loadData();
-
-
-    message.success(
-      '已移除该竞赛'
-    );
-
-
-  };
-
-
-
   return (
-
     <>
+
+
       <Typography.Title level={3}>
         我的竞赛
       </Typography.Title>
@@ -107,7 +47,6 @@ export function MyCompetitions() {
 
         dataSource={myCompetitions}
 
-
         locale={{
           emptyText:'你还没有加入任何竞赛'
         }}
@@ -115,9 +54,10 @@ export function MyCompetitions() {
 
         columns={[
 
+
           {
             title:'竞赛名称',
-            dataIndex:'name'
+            dataIndex:'name',
           },
 
 
@@ -136,6 +76,7 @@ export function MyCompetitions() {
           },
 
 
+
           {
             title:'状态',
             dataIndex:'status',
@@ -151,15 +92,17 @@ export function MyCompetitions() {
           },
 
 
+
           {
             title:'截止时间',
-            dataIndex:'deadline'
+            dataIndex:'deadline',
           },
+
 
 
           {
             title:'AI推荐理由',
-            dataIndex:'reason'
+            dataIndex:'reason',
           },
 
 
@@ -170,12 +113,12 @@ export function MyCompetitions() {
 
               <Button
                 danger
-                onClick={()=>
+                onClick={()=>{
                   handleRemove(record.id)
-                }
+                }}
               >
 
-                移除竞赛
+                移除
 
               </Button>
 
@@ -193,4 +136,5 @@ export function MyCompetitions() {
 
   );
 
+}
 }
