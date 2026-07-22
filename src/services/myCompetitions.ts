@@ -52,3 +52,18 @@ export function removeMyCompetition(id: number) {
   );
 
 }
+export function removeMyCompetition(id:number){
+
+  const list = getMyCompetitions();
+
+  const newList = list.filter(
+    item => item.id !== id
+  );
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(newList)
+  );
+
+}
