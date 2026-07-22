@@ -7,44 +7,58 @@ import {
 } from '../services/myCompetitions';
 
 
-
 export function MyCompetitions() {
 
 
   const [myCompetitions, setMyCompetitions] = useState(
-    getMyCompetitions()
+    []
   );
 
 
+  const loadData = () => {
 
-  // 每次进入页面重新读取数据
+    setMyCompetitions(
+      getMyCompetitions()
+    );
+
+  };
+
+
+
+  useEffect(() => {
+
+    loadData();
+
+  }, []);
+
+
+
+  // 页面重新进入时刷新
   useEffect(() => {
 
 
-    const updateCompetitions = () => {
+    const handleVisibility = () => {
 
-      setMyCompetitions(
-        getMyCompetitions()
-      );
+      if(document.visibilityState === 'visible'){
+
+        loadData();
+
+      }
 
     };
 
 
-    updateCompetitions();
-
-
-    // 页面重新获得焦点时刷新
-    window.addEventListener(
-      'focus',
-      updateCompetitions
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibility
     );
 
 
     return () => {
 
-      window.removeEventListener(
-        'focus',
-        updateCompetitions
+      document.removeEventListener(
+        'visibilitychange',
+        handleVisibility
       );
 
     };
@@ -55,16 +69,13 @@ export function MyCompetitions() {
 
 
 
-
-  const handleRemove = (id:number) => {
+  const handleRemove = (id:number)=>{
 
 
     removeMyCompetition(id);
 
 
-    setMyCompetitions(
-      getMyCompetitions()
-    );
+    loadData();
 
 
     message.success(
@@ -76,25 +87,17 @@ export function MyCompetitions() {
 
 
 
-
-
   return (
 
     <>
-
       <Typography.Title level={3}>
         我的竞赛
       </Typography.Title>
 
 
-
       <Typography.Paragraph>
-
         查看你已经加入的竞赛，管理报名时间和备赛计划。
-
       </Typography.Paragraph>
-
-
 
 
 
@@ -110,15 +113,12 @@ export function MyCompetitions() {
         }}
 
 
-
         columns={[
-
 
           {
             title:'竞赛名称',
-            dataIndex:'name',
+            dataIndex:'name'
           },
-
 
 
           {
@@ -136,8 +136,6 @@ export function MyCompetitions() {
           },
 
 
-
-
           {
             title:'状态',
             dataIndex:'status',
@@ -153,24 +151,16 @@ export function MyCompetitions() {
           },
 
 
-
-
           {
             title:'截止时间',
-            dataIndex:'deadline',
+            dataIndex:'deadline'
           },
-
-
-
 
 
           {
             title:'AI推荐理由',
-            dataIndex:'reason',
+            dataIndex:'reason'
           },
-
-
-
 
 
           {
@@ -179,13 +169,10 @@ export function MyCompetitions() {
             render:(_,record)=>(
 
               <Button
-
                 danger
-
                 onClick={()=>
                   handleRemove(record.id)
                 }
-
               >
 
                 移除竞赛
