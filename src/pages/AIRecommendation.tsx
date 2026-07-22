@@ -98,12 +98,18 @@ export function AIRecommendation() {
                 ))
               }
 
-              <Input.TextArea
-                rows={5}
-                value={input}
-                onChange={e=>setInput(e.target.value)}
-                placeholder="输入你的竞赛目标..."
-              />
+            <Input.TextArea
+  rows={5}
+  value={input}
+  onChange={e=>setInput(e.target.value)}
+  onPressEnter={(e)=>{
+    if(!e.shiftKey){
+      e.preventDefault();
+      handleSend();
+    }
+  }}
+  placeholder="输入你的竞赛目标..."
+/>
 
               <Button
                 type="primary"
