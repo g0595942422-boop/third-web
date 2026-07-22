@@ -6,6 +6,7 @@ import {
 } from "antd";
 
 import { designTokens } from "../styles/tokens";
+import { CompetitionCard } from "./CompetitionCard";
 
 
 interface Props {
@@ -41,31 +42,22 @@ export function AIRecommendationCard({
         </Tag>
 
 
-        <Typography.Title
-          level={4}
-          style={{
-            margin:0
-          }}
-        >
-          {competition.name}
-        </Typography.Title>
-
-
-        <Typography.Paragraph
-          type="secondary"
-        >
-
-          推荐原因：
+        <Typography.Paragraph>
+          <b>适合你的原因：</b>
           <br/>
           与你的兴趣方向高度匹配，
           适合积累项目经验。
-
         </Typography.Paragraph>
 
 
         <Typography.Text>
           建议准备周期：2-3个月
         </Typography.Text>
+
+
+        <CompetitionCard
+          competition={competition}
+        />
 
 
       </Space>
