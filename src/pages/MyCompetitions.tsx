@@ -1,9 +1,26 @@
-import { Table, Typography, Tag } from 'antd';
-import { getMyCompetitions } from '../services/myCompetitions';
+import { Table, Typography, Tag, Button, message } from 'antd';
+import { getMyCompetitions, removeMyCompetition } from '../services/myCompetitions';
+import { useState } from 'react';
 
 export function MyCompetitions() {
 
-  const myCompetitions = getMyCompetitions();
+  const [myCompetitions, setMyCompetitions] = useState(
+    getMyCompetitions()
+  );
+
+
+  const handleRemove = (id:number) => {
+
+    removeMyCompetition(id);
+
+    setMyCompetitions(
+      getMyCompetitions()
+    );
+
+    message.success('已移除该竞赛');
+
+  };
+
 
   return (
     <>
@@ -21,9 +38,11 @@ export function MyCompetitions() {
         rowKey="id"
         dataSource={myCompetitions}
         locale={{
-          emptyText: '你还没有加入任何竞赛'
+          emptyText:'你还没有加入任何竞赛'
         }}
+
         columns={[
+
           {
             title:'竞赛名称',
             dataIndex:'name',
@@ -61,9 +80,25 @@ export function MyCompetitions() {
           {
             title:'AI推荐理由',
             dataIndex:'reason',
+          },
+
+
+          {
+            title:'操作',
+            render:(_,record)=>(
+              <Button
+                danger
+                onClick={()=>handleRemove(record.id)}
+              >
+                移除竞赛
+              </Button>
+            )
           }
+
+
         ]}
       />
+
     </>
   );
 }
