@@ -41,7 +41,9 @@ export function addMyCompetition(
     STORAGE_KEY,
     JSON.stringify(list)
   );
-
+window.dispatchEvent(
+  new Event("competitionChange")
+);
 }
 
 
@@ -63,5 +65,7 @@ export function removeMyCompetition(
     STORAGE_KEY,
     JSON.stringify(newList)
   );
-
+window.dispatchEvent(
+  new Event("competitionChange")
+);
 }
