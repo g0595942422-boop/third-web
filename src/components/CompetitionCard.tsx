@@ -1,12 +1,14 @@
 import { Button, Card, Space, Typography, message } from 'antd';
 import { Competition } from '../services/competitions';
-import { myCompetitions } from '../services/myCompetitions';
+import { addMyCompetition } from '../services/myCompetitions';
 import { designTokens } from '../styles/tokens';
 import { CompetitionTag } from './CompetitionTag';
+
 
 interface CompetitionCardProps {
   competition: Competition;
 }
+
 
 const statusType = {
   报名中: 'success',
@@ -14,22 +16,16 @@ const statusType = {
   推荐: 'primary',
 } as const;
 
+
 export function CompetitionCard({ competition }: CompetitionCardProps) {
+
 
   const addToMyCompetitions = () => {
 
-    const exists = myCompetitions.some(
-      (item) => item.id === competition.id
-    );
-
-    if (exists) {
-      message.info('该竞赛已经在我的竞赛中');
-      return;
-    }
-
-    myCompetitions.push(competition);
+    addMyCompetition(competition);
 
     message.success('已加入我的竞赛');
+
   };
 
 
@@ -49,6 +45,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
       >
 
         <Space wrap>
+
           <CompetitionTag type={statusType[competition.status]}>
             {competition.status}
           </CompetitionTag>
@@ -56,6 +53,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
           <CompetitionTag>
             {competition.difficulty}
           </CompetitionTag>
+
         </Space>
 
 
@@ -73,14 +71,18 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
 
 
         <Space wrap>
+
           {competition.tags.map((tag) => (
+
             <CompetitionTag
               key={tag}
               type="primary"
             >
               {tag}
             </CompetitionTag>
+
           ))}
+
         </Space>
 
 
@@ -93,6 +95,7 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
           推荐理由：
           {competition.reason}
         </Typography.Paragraph>
+
 
 
         <Space>
