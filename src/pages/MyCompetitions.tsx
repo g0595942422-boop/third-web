@@ -20,7 +20,7 @@ export function MyCompetitions() {
   // 每次进入页面重新读取数据
   useEffect(() => {
 
-
+ 
     const updateCompetitions = () => {
 
       setMyCompetitions(
