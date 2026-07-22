@@ -15,12 +15,56 @@ import {
   SendOutlined
 } from "@ant-design/icons";
 
+import { useState } from "react";
+
 import { CompetitionCard } from "../components/CompetitionCard";
 import { competitions } from "../services/competitions";
 import { designTokens } from "../styles/tokens";
 
 
 export function AIRecommendation() {
+
+  const [input, setInput] = useState("");
+
+  const [messages, setMessages] = useState([
+    {
+      role:"ai",
+      content:"你好，我是你的竞赛规划助手。请告诉我你的专业方向、兴趣以及参赛目标。"
+    }
+  ]);
+
+
+  const handleSend = () => {
+
+    if (!input.trim()) return;
+
+
+    setMessages(prev => [
+      ...prev,
+      {
+        role:"user",
+        content:input
+      }
+    ]);
+
+
+    setTimeout(()=>{
+
+      setMessages(prev=>[
+        ...prev,
+        {
+          role:"ai",
+          content:"根据你的情况，我建议关注人工智能创新、创新创业以及综合实践类竞赛。这些方向能够帮助你积累项目经验，提高竞争力。"
+        }
+      ]);
+
+    },500);
+
+
+    setInput("");
+
+  };
+
 
   return (
     <Space
@@ -39,10 +83,7 @@ export function AIRecommendation() {
           designTokens.spacing.lg,
           designTokens.spacing.lg
         ]}
-        align="stretch"
       >
-
-        {/* 左侧AI聊天 */}
 
         <Col xs={24} md={10}>
 
@@ -53,7 +94,6 @@ export function AIRecommendation() {
               </>
             }
             style={{
-              height:"100%",
               borderRadius:designTokens.borderRadius,
               boxShadow:designTokens.boxShadow
             }}
@@ -65,30 +105,45 @@ export function AIRecommendation() {
               style={{width:"100%"}}
             >
 
-              <Card size="small">
+              {
+                messages.map((item,index)=>(
 
-                <Typography.Text>
-                  你好，我是你的竞赛规划助手。
-                  请告诉我你的专业方向、兴趣以及参赛目标。
-                </Typography.Text>
+                  <Card
+                    size="small"
+                    key={index}
+                    style={{
+                      background:
+                        item.role==="user"
+                          ? "#f0f5ff"
+                          : "#fafafa"
+                    }}
+                  >
 
-              </Card>
+                    <Typography.Text>
 
+                      {
+                        item.role==="user"
+                          ? "你："
+                          : "AI："
+                      }
 
-              <Card size="small">
+                      {item.content}
 
-                <Typography.Text type="secondary">
-                  示例：
-                  我是经济学专业学生，希望参加AI相关比赛，
-                  提升项目经验和就业竞争力。
-                </Typography.Text>
+                    </Typography.Text>
 
-              </Card>
+                  </Card>
+
+                ))
+              }
 
 
               <Input.TextArea
-                rows={5}
-                placeholder="输入你的竞赛目标..."
+                rows={4}
+                value={input}
+                onChange={
+                  e=>setInput(e.target.value)
+                }
+                placeholder="输入你的专业、兴趣和竞赛目标..."
               />
 
 
@@ -96,9 +151,11 @@ export function AIRecommendation() {
                 type="primary"
                 icon={<SendOutlined />}
                 block
+                onClick={handleSend}
               >
                 发送给AI分析
               </Button>
+
 
             </Space>
 
@@ -107,8 +164,6 @@ export function AIRecommendation() {
         </Col>
 
 
-
-        {/* 右侧AI推荐 */}
 
         <Col xs={24} md={14}>
 
@@ -126,49 +181,40 @@ export function AIRecommendation() {
               }}
             >
 
-              <Space
-                direction="vertical"
-                style={{width:"100%"}}
-              >
-
-                <Typography.Text strong>
-                  综合匹配度
-                </Typography.Text>
+              <Typography.Text strong>
+                综合匹配度
+              </Typography.Text>
 
 
-                <Progress
-                  percent={95}
-                />
+              <Progress percent={95}/>
 
 
-                <Typography.Title level={5}>
-                  推荐方向：AI创新与应用
-                </Typography.Title>
+              <Typography.Title level={5}>
+                推荐方向：AI创新与应用
+              </Typography.Title>
 
 
-                <Typography.Paragraph>
-                  <b>适合你的原因：</b>
-                  <br />
-                  · AI方向发展空间大，适合积累项目经验
-                  <br />
-                  · 创新创业类竞赛与个人成长目标匹配
-                  <br />
-                  · 可以结合专业背景形成差异化优势
-                </Typography.Paragraph>
+              <Typography.Paragraph>
+                <b>适合你的原因：</b>
+                <br/>
+                · AI方向发展空间大
+                <br/>
+                · 可以结合个人专业背景形成优势
+                <br/>
+                · 有利于积累项目经验
+              </Typography.Paragraph>
 
 
-                <Typography.Paragraph>
-                  <b>提升方向：</b>
-                  <br />
-                  · 学习Python基础
-                  <br />
-                  · 积累AI项目实践经验
-                  <br />
-                  · 提前准备竞赛作品
-                </Typography.Paragraph>
+              <Typography.Paragraph>
+                <b>提升方向：</b>
+                <br/>
+                · 学习Python基础
+                <br/>
+                · 增加项目实践
+                <br/>
+                · 提前准备竞赛作品
+              </Typography.Paragraph>
 
-
-              </Space>
 
             </Card>
 
@@ -199,14 +245,10 @@ export function AIRecommendation() {
                       key={item.id}
                     >
 
-                      <Card
-                        style={{
-                          height:"100%"
-                        }}
-                      >
+                      <Card>
 
                         <Tag color="blue">
-                          AI匹配度 90%
+                          AI匹配度90%
                         </Tag>
 
 
@@ -222,7 +264,6 @@ export function AIRecommendation() {
                 }
 
               </Row>
-
 
             </Card>
 
