@@ -1,14 +1,7 @@
 import { Table, Typography, Tag } from 'antd';
-import { competitions } from '../services/competitions';
+import { myCompetitions } from '../services/myCompetitions';
 
 export function MyCompetitions() {
-  // 目前模拟用户收藏的比赛
-  // 后续这里替换成后端接口：
-  // getMyCompetitions(userId)
-
-  const myCompetitions = competitions.filter(
-    (item) => item.status === '推荐' || item.status === '热门'
-  );
 
   return (
     <>
@@ -16,19 +9,24 @@ export function MyCompetitions() {
         我的竞赛
       </Typography.Title>
 
+
       <Typography.Paragraph>
-        查看你收藏和关注的竞赛，方便管理报名时间和准备进度。
+        查看你已经加入的竞赛，管理报名时间和备赛计划。
       </Typography.Paragraph>
 
 
       <Table
         rowKey="id"
         dataSource={myCompetitions}
+        locale={{
+          emptyText: '你还没有加入任何竞赛'
+        }}
         columns={[
           {
             title:'竞赛名称',
             dataIndex:'name',
           },
+
 
           {
             title:'难度',
@@ -59,7 +57,7 @@ export function MyCompetitions() {
 
 
           {
-            title:'推荐理由',
+            title:'AI推荐理由',
             dataIndex:'reason',
           }
         ]}
