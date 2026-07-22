@@ -1,5 +1,6 @@
-import { Table, Typography, Tag, Button } from 'antd';
+import { Competition } from '../services/competitions';
 import { useState } from 'react';
+import { Table, Typography, Tag, Button } from 'antd';
 import { Competition } from '../services/competitions';
 import { 
   getMyCompetitions,
