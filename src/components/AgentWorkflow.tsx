@@ -12,9 +12,9 @@ import {
 
 import { designTokens } from "../styles/tokens";
 
-export interface WorkflowStep{
+interface WorkflowStep{
   name:string;
-  status:"done"|"running"|"wait";
+  status:string;
 }
 
 interface AgentWorkflowProps{
@@ -27,26 +27,39 @@ export function AgentWorkflow({
 
   const items=steps.map(step=>{
 
+    let icon;
+
+    let status:
+    "finish" |
+    "process" |
+    "wait";
+
+
     if(step.status==="done"){
-      return {
-        title:step.name,
-        icon:<CheckCircleOutlined/>,
-        status:"finish" as const
-      };
+
+      icon=<CheckCircleOutlined/>;
+
+      status="finish";
+
+    }else if(step.status==="running"){
+
+      icon=<LoadingOutlined/>;
+
+      status="process";
+
+    }else{
+
+      icon=<ClockCircleOutlined/>;
+
+      status="wait";
+
     }
 
-    if(step.status==="running"){
-      return {
-        title:step.name,
-        icon:<LoadingOutlined/>,
-        status:"process" as const
-      };
-    }
 
     return {
       title:step.name,
-      icon:<ClockCircleOutlined/>,
-      status:"wait" as const
+      icon,
+      status
     };
 
   });
@@ -54,7 +67,7 @@ export function AgentWorkflow({
 
   return(
     <Card
-      title="AI Agent 工作流"
+      title="Agent任务流"
       style={{
         borderRadius:designTokens.borderRadius,
         boxShadow:designTokens.boxShadow
@@ -65,7 +78,7 @@ export function AgentWorkflow({
         steps.length===0
         ?
         <Typography.Text type="secondary">
-          等待用户输入，AI将自动规划任务。
+          等待用户输入，智能体将自动生成任务流程。
         </Typography.Text>
         :
         <Steps
