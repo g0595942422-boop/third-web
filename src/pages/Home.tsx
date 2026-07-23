@@ -58,17 +58,17 @@ const WORKFLOW_NODES = [
 export function Home() {
   const hot = competitions.slice(0,3);
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const [aiLoading, setAiLoading] = useState(false);
-  const goAI = () => {
-    setAiLoading(true);
-    window.dispatchEvent(new Event('openAI'));
-    setTimeout(() => setAiLoading(false), 3000);
-  };
-  const goMine = () => window.dispatchEvent(new Event('goMine'));
+    const [aiLoading, setAiLoading] = useState(false);
+    const goAI = () => {
+      setAiLoading(true);
+      window.dispatchEvent(new Event('openAI'));
+      setTimeout(() => setAiLoading(false), 3000);
+    };
+    const goMine = () => window.dispatchEvent(new Event('goMine'));
 
-  const isMultiLine = (text: string) => text.length > 56;
+    const isMultiLine = (text: string) => text.length > 56;
 
-  return (
+    return (
     <div className="fade-in">
 
       {/* ===== HERO SECTION ===== */}
@@ -251,7 +251,8 @@ export function Home() {
                       <Tag key={t} style={{ borderRadius:4, fontSize:12, padding:'0 10px', lineHeight:'24px', background:'rgba(22,119,255,0.06)', color: designTokens.colorPrimary, border:'1px solid rgba(22,119,255,0.12)', margin:0 }}>{t}</Tag>
                     ))}
                   </div>
-                  {isMultiLine(item.summary) && (
+                  
+                                    {isMultiLine(item.summary) && (
                     <div onClick={() => setExpandedId(expandedId === item.id ? null : item.id)} style={{ cursor:'pointer', color: designTokens.colorPrimary, fontSize:12, marginBottom:4, userSelect:'none' }}>
                       {expandedId === item.id ? '收起详情 ▲' : '展开详情 ▼'}
                     </div>
