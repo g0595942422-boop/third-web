@@ -214,21 +214,21 @@ export function CompetitionCard({
           )}
         </div>
 
-                                {/* 展开/收起 - summary或reason任一超长时显示 */}
-        {(competition.summary.length > 56 || competition.reason.length > 56) && (
-        <span
-          onClick={() => setExpanded(!expanded)}
-          style={{
-            cursor: 'pointer',
-            color: designTokens.colorPrimary,
-            fontSize: 12,
-            userSelect: 'none',
-            display: 'inline-block',
-            marginBottom: 8,
-          }}
-        >
-                    {expanded ? '收起详情 ▲' : '展开详情 ▼'}
-        </span>
+                                {/* 展开/收起 - 仅在摘要超2行时显示 */}
+        {competition.summary.length > 56 && (
+          <span
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              cursor: 'pointer',
+              color: designTokens.colorPrimary,
+              fontSize: 12,
+              userSelect: 'none',
+              display: 'inline-block',
+              marginBottom: 8,
+            }}
+          >
+            {expanded ? '收起详情 ▲' : '展开详情 ▼'}
+          </span>
         )}
 
         <div style={{ display: 'flex', gap: 8 }}>
