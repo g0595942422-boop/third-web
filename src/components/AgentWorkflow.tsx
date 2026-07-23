@@ -1,178 +1,148 @@
-import {
-  Card,
-  Typography,
-  Tag
-} from "antd";
-
-import {
-  UserOutlined,
-  SearchOutlined,
-  RobotOutlined,
-  BulbOutlined
-} from "@ant-design/icons";
-
+import {Card,Typography,Tag} from "antd";
+import {UserOutlined,SearchOutlined,RobotOutlined,BulbOutlined} from "@ant-design/icons";
+import {useState,useEffect} from "react";
 import {designTokens} from "../styles/tokens";
 
-
-const steps=[
+const agents=[
 {
 title:"分析用户画像",
-desc:"正在分析专业、兴趣、技能",
-icon:<UserOutlined/>,
-status:"completed"
+desc:"正在分析专业、兴趣、技能情况",
+icon:<UserOutlined/>
 },
 {
 title:"检索竞赛数据库",
-desc:"找到12项相关竞赛",
-icon:<SearchOutlined/>,
-status:"completed"
+desc:"寻找匹配的竞赛项目",
+icon:<SearchOutlined/>
 },
 {
 title:"评估竞赛价值",
-desc:"计算匹配度和发展价值",
-icon:<RobotOutlined/>,
-status:"active"
+desc:"计算匹配程度和发展价值",
+icon:<RobotOutlined/>
 },
 {
 title:"生成参赛方案",
-desc:"等待分析完成",
-icon:<BulbOutlined/>,
-status:"wait"
+desc:"输出最终竞赛规划建议",
+icon:<BulbOutlined/>
 }
 ];
 
-
 export function AgentWorkflow(){
+const [active,setActive]=useState(0);
+
+useEffect(()=>{
+const timer=setInterval(()=>{
+setActive(prev=>{
+if(prev>=3){
+return 3;
+}
+return prev+1;
+});
+},2000);
+return()=>clearInterval(timer);
+},[]);
 
 return(
-
-<div>
-
-<Typography.Title
-level={4}
->
-AI 思考过程
-</Typography.Title>
-
-
-{
-steps.map((item,index)=>(
-
-<div
-key={item.title}
+<Card
+title="AI 思考过程"
 style={{
-display:"flex",
-gap:15,
-marginBottom:25,
-position:"relative"
+borderRadius:designTokens.borderRadius,
+boxShadow:designTokens.boxShadow
 }}
 >
-
-
+<div>
 {
-index!==steps.length-1&&
-
+agents.map((agent,index)=>(
+<div
+key={agent.title}
+style={{
+position:"relative",
+paddingBottom:index===agents.length-1?0:28
+}}
+>
+{
+index!==agents.length-1&&(
 <div
 style={{
 position:"absolute",
-left:18,
-top:40,
-height:35,
-borderLeft:"1px dashed #ccc"
+left:22,
+top:42,
+height:45,
+borderLeft:"1px dashed #ddd"
 }}
 />
-
+)
 }
-
-
 <div
 style={{
-width:38,
-height:38,
+display:"flex",
+alignItems:"flex-start",
+gap:16
+}}
+>
+<div
+style={{
+width:44,
+height:44,
 borderRadius:"50%",
 display:"flex",
 alignItems:"center",
 justifyContent:"center",
-background:
-item.status==="active"
-?
-"#1677ff"
-:
-"#f5f5f5",
-color:
-item.status==="active"
-?
-"#fff"
-:
-"#333"
+fontSize:20,
+background:index===active?"#1677ff":"#f5f5f5",
+color:index===active?"white":"#666"
 }}
 >
-
-{item.icon}
-
+{agent.icon}
 </div>
-
-
-<div>
-
+<div
+style={{
+flex:1
+}}
+>
 <Typography.Text strong>
-{item.title}
+{agent.title}
 </Typography.Text>
-
-
 <br/>
-
 <Typography.Text
 type="secondary"
+style={{
+fontSize:13
+}}
 >
-{item.desc}
+{agent.desc}
 </Typography.Text>
-
-
 <br/>
-
-
 <Tag
 color={
-item.status==="completed"
+index<active
 ?
 "success"
 :
-item.status==="active"
+index===active
 ?
 "processing"
 :
 "default"
 }
 >
-
 {
-item.status==="completed"
+index<active
 ?
 "✓ 已完成"
 :
-item.status==="active"
+index===active
 ?
 "◉ 分析中"
 :
 "○ 等待"
 }
-
 </Tag>
-
-
 </div>
-
-
 </div>
-
+</div>
 ))
-
 }
-
-
 </div>
-
-)
-
+</Card>
+);
 }
