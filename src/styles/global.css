@@ -13,3 +13,20 @@ body { margin: 0; }
     opacity: 1;
   }
 }
+
+
+/* 光波动画 - AI消息边框 */
+@keyframes glowRotate {
+  0% {
+    --angle: 0deg;
+  }
+  100% {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}

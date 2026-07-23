@@ -1,4 +1,4 @@
-﻿import {
+import {
   Card,
   Col,
   Row,
@@ -127,7 +127,7 @@ export function AIRecommendation() {
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  const [messages, setMessages] = useState<Message[]>([
+const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
       content: "你好！我是 **赛智通 AI 竞赛智能体** 🤖\n\n我可以帮你分析专业背景、推荐适合的竞赛、规划参赛路线。\n\n**请告诉我：**\n• 你的专业是什么？\n• 你对哪些方向感兴趣？\n• 你想达到什么目标？"
@@ -408,6 +408,7 @@ export function AIRecommendation() {
 
                   <div
                     style={{
+                      position: "relative",
                       maxWidth: "78%",
                       padding: "14px 18px",
                       borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
@@ -418,10 +419,28 @@ export function AIRecommendation() {
                       border: msg.role === "assistant" ? "1px solid rgba(22, 119, 255, 0.12)" : "none",
                       boxShadow: msg.role === "assistant" ? "0 4px 12px rgba(15, 23, 42, 0.06)" : "0 4px 12px rgba(22, 119, 255, 0.2)",
                       whiteSpace: "pre-wrap",
-                      lineHeight: 1.7
+                      lineHeight: 1.7,
+                      overflow: "hidden",
                     }}
                   >
-                    <Typography.Text style={{ color: msg.role === "user" ? "#fff" : "rgba(15,23,42,0.85)", fontSize: 14 }}>
+                    {/* AI消息 - 呼吸光晕效果 */}
+                    {msg.role === "assistant" && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: -1,
+                          left: -1,
+                          right: -1,
+                          bottom: -1,
+                          borderRadius: "19px 19px 19px 5px",
+                          background: "linear-gradient(135deg, transparent 30%, rgba(22,119,255,0.08) 60%, transparent 90%)",
+                          opacity: 0.5 + Math.sin(Date.now() / 800) * 0.25,
+                          zIndex: 0,
+                          pointerEvents: "none",
+                        }}
+                      />
+                    )}
+                    <Typography.Text style={{ color: msg.role === "user" ? "#fff" : "rgba(15,23,42,0.85)", fontSize: 14, position: "relative", zIndex: 1 }}>
                       {msg.content}
                     </Typography.Text>
                   </div>
