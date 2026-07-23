@@ -11,38 +11,34 @@ import {
   BulbOutlined
 } from "@ant-design/icons";
 
-import { designTokens } from "../styles/tokens";
+import {designTokens} from "../styles/tokens";
 
 
-const agents=[
-  {
-    title:"用户画像 Agent",
-    desc:"分析专业背景、兴趣方向、技能情况",
-    icon:<UserOutlined/>,
-    status:"完成",
-    type:"done"
-  },
-  {
-    title:"竞赛检索 Agent",
-    desc:"匹配竞赛数据库，寻找适合项目",
-    icon:<SearchOutlined/>,
-    status:"完成",
-    type:"done"
-  },
-  {
-    title:"竞赛评估 Agent",
-    desc:"分析匹配程度和参赛价值",
-    icon:<RobotOutlined/>,
-    status:"分析中",
-    type:"running"
-  },
-  {
-    title:"方案生成 Agent",
-    desc:"生成最终竞赛规划建议",
-    icon:<BulbOutlined/>,
-    status:"等待",
-    type:"wait"
-  }
+const steps=[
+{
+title:"分析用户画像",
+desc:"正在分析专业、兴趣、技能",
+icon:<UserOutlined/>,
+status:"completed"
+},
+{
+title:"检索竞赛数据库",
+desc:"找到12项相关竞赛",
+icon:<SearchOutlined/>,
+status:"completed"
+},
+{
+title:"评估竞赛价值",
+desc:"计算匹配度和发展价值",
+icon:<RobotOutlined/>,
+status:"active"
+},
+{
+title:"生成参赛方案",
+desc:"等待分析完成",
+icon:<BulbOutlined/>,
+status:"wait"
+}
 ];
 
 
@@ -50,99 +46,86 @@ export function AgentWorkflow(){
 
 return(
 
-<Card
-title="AI Agent 工作流"
-style={{
-borderRadius:designTokens.borderRadius,
-boxShadow:designTokens.boxShadow
-}}
->
-
-
 <div>
 
+<Typography.Title
+level={4}
+>
+AI 思考过程
+</Typography.Title>
+
+
 {
-agents.map((agent,index)=>(
+steps.map((item,index)=>(
 
 <div
-key={agent.title}
+key={item.title}
 style={{
-position:"relative",
-paddingBottom:index===agents.length-1?0:28
+display:"flex",
+gap:15,
+marginBottom:25,
+position:"relative"
 }}
 >
 
 
 {
-index!==agents.length-1&&
+index!==steps.length-1&&
+
 <div
 style={{
 position:"absolute",
-left:22,
-top:45,
-height:40,
-borderLeft:"1px dashed #ddd"
+left:18,
+top:40,
+height:35,
+borderLeft:"1px dashed #ccc"
 }}
 />
+
 }
 
 
-
 <div
 style={{
+width:38,
+height:38,
+borderRadius:"50%",
 display:"flex",
 alignItems:"center",
-gap:14,
-padding:16,
-borderRadius:12,
-border:
-agent.type==="running"
-?
-"1px solid #1677ff"
-:
-"1px solid #eee",
+justifyContent:"center",
 background:
-agent.type==="running"
+item.status==="active"
 ?
-"#f0f7ff"
+"#1677ff"
 :
+"#f5f5f5",
+color:
+item.status==="active"
+?
 "#fff"
+:
+"#333"
 }}
 >
 
-
-<div
-style={{
-fontSize:22
-}}
->
-
-{agent.icon}
+{item.icon}
 
 </div>
 
 
-<div
-style={{
-flex:1
-}}
->
+<div>
 
 <Typography.Text strong>
-{agent.title}
+{item.title}
 </Typography.Text>
 
 
 <br/>
 
-
 <Typography.Text
 type="secondary"
-style={{
-fontSize:13
-}}
 >
-{agent.desc}
+{item.desc}
 </Typography.Text>
 
 
@@ -151,36 +134,31 @@ fontSize:13
 
 <Tag
 color={
-agent.type==="done"
+item.status==="completed"
 ?
 "success"
 :
-agent.type==="running"
+item.status==="active"
 ?
-"blue"
+"processing"
 :
 "default"
 }
 >
 
 {
-agent.type==="done"
+item.status==="completed"
 ?
-"✓ "
+"✓ 已完成"
 :
-agent.type==="running"
+item.status==="active"
 ?
-"◉ "
+"◉ 分析中"
 :
-"○ "
+"○ 等待"
 }
 
-{agent.status}
-
 </Tag>
-
-
-</div>
 
 
 </div>
@@ -194,9 +172,6 @@ agent.type==="running"
 
 
 </div>
-
-
-</Card>
 
 )
 
