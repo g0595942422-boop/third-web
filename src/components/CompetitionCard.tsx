@@ -214,8 +214,8 @@ export function CompetitionCard({
           )}
         </div>
 
-                                {/* 展开/收起 - 仅在摘要超2行时显示 */}
-        {competition.summary.length > 56 && (
+                                {/* 展开/收起 - 理由超长时显示 */}
+        {competition.reason.length > 40 && (
           <span
             onClick={() => setExpanded(!expanded)}
             style={{
