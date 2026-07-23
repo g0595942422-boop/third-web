@@ -9,71 +9,75 @@ import {
 } from "antd";
 
 import {
-  RobotOutlined,
-  SendOutlined
+  SendOutlined,
+  RobotOutlined
 } from "@ant-design/icons";
 
 import { useRef, useState } from "react";
 
+import { AgentWorkflow } from "../components/AgentWorkflow";
 import { CompetitionCard } from "../components/CompetitionCard";
 import { competitions } from "../services/competitions";
 import { designTokens } from "../styles/tokens";
 
-export function AIRecommendation() {
+
+export function AIRecommendation(){
+
   const [input,setInput]=useState("");
+
   const inputRef=useRef<any>(null);
 
-  const [messages,setMessages]=useState([
-    {
-      role:"ai",
-      content:"你好，我是你的竞赛规划助手。请告诉我你的专业方向、兴趣以及参赛目标。"
-    }
-  ]);
 
-  const [loading,setLoading]=useState(false);
+  const [analyzing,setAnalyzing]=useState(false);
+
+
 
   const handleSend=()=>{
+
     if(!input.trim()) return;
 
-    const message=input;
 
-    setMessages(prev=>[
-      ...prev,
-      {
-        role:"user",
-        content:message
-      }
-    ]);
+    setAnalyzing(true);
+
+
+    setTimeout(()=>{
+
+      setAnalyzing(false);
+
+    },1500);
+
+
 
     setInput("");
-    setLoading(true);
+
 
     setTimeout(()=>{
-      setLoading(false);
 
-      setMessages(prev=>[
-        ...prev,
-        {
-          role:"ai",
-          content:"根据你的情况，我建议关注人工智能创新、创新创业以及综合实践类竞赛，这些方向能够帮助你积累项目经验，提高竞争力。"
-        }
-      ]);
-    },1200);
-
-    setTimeout(()=>{
       inputRef.current?.focus();
+
     },100);
+
+
   };
 
+
+
   return (
+
     <Space
       direction="vertical"
       size={designTokens.spacing.xl}
-      style={{width:"100%"}}
+      style={{
+        width:"100%"
+      }}
     >
+
+
       <Typography.Title level={2}>
         AI竞赛规划助手
       </Typography.Title>
+
+
 
       <Row
         gutter={[
@@ -83,151 +87,345 @@ export function AIRecommendation() {
         align="stretch"
       >
 
-        <Col xs={24} md={10}>
+
+
+        {/* 左侧 Agent */}
+
+        <Col
+          xs={24}
+          md={10}
+        >
+
+
           <Card
+
             title={
               <>
-                <RobotOutlined/> AI助手
+                <RobotOutlined/>
+                {" "}竞赛智能体
               </>
             }
+
             style={{
-              height:700,
-              borderRadius:designTokens.borderRadius,
-              boxShadow:designTokens.boxShadow
+
+              height:720,
+
+              borderRadius:
+                designTokens.borderRadius,
+
+              boxShadow:
+                designTokens.boxShadow
+
             }}
+
           >
+
+
             <Space
+
               direction="vertical"
-              size="middle"
+
+              size="large"
+
               style={{
                 width:"100%"
               }}
+
             >
 
-              <div
-                style={{
-                  height:460,
-                  overflowY:"auto",
-                  paddingRight:8
-                }}
+
+
+              <Card
+                size="small"
               >
-                {
-                  messages.map((item,index)=>(
-                    <div
-                      key={index}
-                      style={{
-                        display:"flex",
-                        justifyContent:item.role==="user"?"flex-end":"flex-start",
-                        marginBottom:12
-                      }}
-                    >
-                      <div
-                        style={{
-                          maxWidth:"80%",
-                          padding:"10px 14px",
-                          borderRadius:12,
-                          background:item.role==="user"?"#e6f4ff":"#f5f5f5"
-                        }}
-                      >
-                        <Typography.Text>
-                          {item.role==="ai"?"AI：":"你："}
-                          {item.content}
-                        </Typography.Text>
-                      </div>
-                    </div>
-                  ))
-                }
 
-                {
-                  loading&&(
-                    <div style={{marginBottom:12}}>
-                      <div
-                        style={{
-                          display:"inline-block",
-                          padding:"10px 14px",
-                          borderRadius:12,
-                          background:"#f5f5f5"
-                        }}
-                      >
-                        AI正在分析你的竞赛方向...
-                      </div>
-                    </div>
-                  )
-                }
-              </div>
+                <Typography.Text strong>
+                  当前任务
+                </Typography.Text>
 
-              <Input.TextArea
-                ref={inputRef}
-                rows={4}
-                value={input}
-                onChange={e=>setInput(e.target.value)}
-                onPressEnter={e=>{
-                  if(!e.shiftKey){
-                    e.preventDefault();
-                    handleSend();
+
+                <Typography.Paragraph
+                  style={{
+                    marginTop:10,
+                    marginBottom:0
+                  }}
+                >
+
+                  根据你的专业背景、
+                  兴趣方向以及目标，
+                  推荐最适合参加的竞赛。
+
+                </Typography.Paragraph>
+
+
+              </Card>
+
+
+
+              <AgentWorkflow />
+
+
+
+              <Card
+                size="small"
+                title="输入需求"
+              >
+
+
+                <Input.TextArea
+
+                  ref={inputRef}
+
+                  rows={4}
+
+                  value={input}
+
+                  onChange={
+                    e=>setInput(e.target.value)
                   }
-                }}
-                placeholder="输入你的专业、兴趣和竞赛目标..."
-              />
 
-              <Button
-                type="primary"
-                icon={<SendOutlined/>}
-                block
-                onClick={handleSend}
-              >
-                发送给AI分析
-              </Button>
+
+                  placeholder=
+                  "输入你的专业、兴趣和竞赛目标..."
+
+                />
+
+
+
+                <Button
+
+                  type="primary"
+
+                  icon={
+                    <SendOutlined/>
+                  }
+
+                  block
+
+                  style={{
+                    marginTop:12
+                  }}
+
+                  onClick={handleSend}
+
+                >
+
+                  {
+                    analyzing
+                    ?
+                    "AI正在分析..."
+                    :
+                    "发送给AI分析"
+                  }
+
+
+                </Button>
+
+
+              </Card>
+
+
 
             </Space>
+
+
           </Card>
+
+
+
         </Col>
 
-        <Col xs={24} md={14}>
+
+
+
+
+
+        {/* 右侧结果 */}
+
+        <Col
+          xs={24}
+          md={14}
+        >
+
+
           <Card
-            title="AI推荐竞赛"
+
+            title="AI决策结果"
+
             style={{
-              height:700,
-              borderRadius:designTokens.borderRadius,
-              boxShadow:designTokens.boxShadow
+
+              height:720,
+
+              borderRadius:
+                designTokens.borderRadius,
+
+              boxShadow:
+                designTokens.boxShadow
+
             }}
+
           >
-            <Typography.Paragraph type="secondary">
-              AI根据你的背景和目标，推荐适合你的竞赛方向。
+
+
+
+            <Typography.Paragraph
+              type="secondary"
+            >
+
+              AI根据你的背景和目标，
+              分析竞赛方向并生成推荐方案。
+
             </Typography.Paragraph>
 
-            <div
+
+
+
+            <Card
+              size="small"
               style={{
-                height:560,
-                overflowY:"auto",
-                paddingRight:8
+                marginBottom:20
               }}
             >
+
+              <Typography.Text strong>
+                AI分析状态
+              </Typography.Text>
+
+
+              <br/>
+
+              <Typography.Text>
+                ✓ 已分析个人背景
+              </Typography.Text>
+
+
+              <br/>
+
+
+              <Typography.Text>
+                ✓ 已匹配竞赛数据库
+              </Typography.Text>
+
+
+              <br/>
+
+
+              <Typography.Text>
+                ◉ 正在评估竞赛价值
+              </Typography.Text>
+
+
+              <br/>
+
+
+              <Typography.Text
+                type="secondary"
+              >
+                ○ 生成参赛方案
+              </Typography.Text>
+
+
+            </Card>
+
+
+
+
+
+            <Typography.Title
+              level={4}
+            >
+
+              推荐竞赛 TOP4
+
+            </Typography.Title>
+
+
+
+
+            <div
+
+              style={{
+
+                height:390,
+
+                overflowY:"auto",
+
+                paddingRight:8
+
+              }}
+
+            >
+
+
               <Row
+
                 gutter={[
                   designTokens.spacing.lg,
                   designTokens.spacing.lg
                 ]}
+
               >
+
+
                 {
-                  competitions.slice(0,4).map(competition=>(
+
+                  competitions
+                  .slice(0,4)
+                  .map(
+                    competition=>(
+
+
                     <Col
+
                       xs={24}
+
                       sm={12}
-                      key={competition.id}
+
+                      key={
+                        competition.id
+                      }
+
                     >
+
+
                       <CompetitionCard
-                        competition={competition}
+
+                        competition={
+                          competition
+                        }
+
                       />
+
+
                     </Col>
+
+
                   ))
+
                 }
+
+
               </Row>
+
+
             </div>
+
+
+
           </Card>
+
+
+
         </Col>
 
+
+
       </Row>
+
+
+
     </Space>
+
   );
+
 }
