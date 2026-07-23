@@ -52,6 +52,7 @@ const WORKFLOW_STEPS = [
   { icon: <ThunderboltOutlined />, title: '生成方案', desc: '输出个性化竞赛推荐与规划路线', color: '#eb2f96' },
 ];
 
+// 赛智通首页 - 纯前端展示版本
 export function Home() {
   const hot = competitions.slice(0,3);
   const [expandedId, setExpandedId] = useState<number | null>(null);
