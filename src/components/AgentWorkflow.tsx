@@ -1,6 +1,5 @@
 import {
   Card,
-  Space,
   Typography,
   Tag
 } from "antd";
@@ -18,27 +17,31 @@ import { designTokens } from "../styles/tokens";
 const agents=[
   {
     title:"用户画像 Agent",
-    icon:<UserOutlined/>,
     desc:"分析专业背景、兴趣方向、技能情况",
-    status:"done"
+    icon:<UserOutlined/>,
+    status:"完成",
+    type:"done"
   },
   {
     title:"竞赛检索 Agent",
-    icon:<SearchOutlined/>,
     desc:"匹配竞赛数据库，寻找适合项目",
-    status:"done"
+    icon:<SearchOutlined/>,
+    status:"完成",
+    type:"done"
   },
   {
     title:"竞赛评估 Agent",
-    icon:<RobotOutlined/>,
     desc:"分析匹配程度和参赛价值",
-    status:"running"
+    icon:<RobotOutlined/>,
+    status:"分析中",
+    type:"running"
   },
   {
     title:"方案生成 Agent",
-    icon:<BulbOutlined/>,
     desc:"生成最终竞赛规划建议",
-    status:"waiting"
+    icon:<BulbOutlined/>,
+    status:"等待",
+    type:"wait"
   }
 ];
 
@@ -55,14 +58,8 @@ boxShadow:designTokens.boxShadow
 }}
 >
 
-<Space
-direction="vertical"
-size="large"
-style={{
-width:"100%"
-}}
->
 
+<div>
 
 {
 agents.map((agent,index)=>(
@@ -70,37 +67,53 @@ agents.map((agent,index)=>(
 <div
 key={agent.title}
 style={{
-position:"relative"
+position:"relative",
+paddingBottom:index===agents.length-1?0:28
 }}
 >
 
 
-<Card
-size="small"
+{
+index!==agents.length-1&&
+<div
 style={{
-
-borderLeft:
-agent.status==="running"
-?"4px solid #1677ff"
-:
-agent.status==="done"
-?"4px solid #52c41a"
-:"4px solid #d9d9d9",
-
-background:
-agent.status==="running"
-?"#f0f7ff"
-:"#fff"
-
+position:"absolute",
+left:22,
+top:45,
+height:40,
+borderLeft:"1px dashed #ddd"
 }}
->
+/>
+}
 
 
-<Space>
 
 <div
 style={{
-fontSize:20
+display:"flex",
+alignItems:"center",
+gap:14,
+padding:16,
+borderRadius:12,
+border:
+agent.type==="running"
+?
+"1px solid #1677ff"
+:
+"1px solid #eee",
+background:
+agent.type==="running"
+?
+"#f0f7ff"
+:
+"#fff"
+}}
+>
+
+
+<div
+style={{
+fontSize:22
 }}
 >
 
@@ -109,111 +122,81 @@ fontSize:20
 </div>
 
 
-<div>
+<div
+style={{
+flex:1
+}}
+>
 
 <Typography.Text strong>
-
 {agent.title}
-
 </Typography.Text>
 
 
 <br/>
 
 
-<Typography.Text type="secondary">
-
+<Typography.Text
+type="secondary"
+style={{
+fontSize:13
+}}
+>
 {agent.desc}
-
 </Typography.Text>
 
 
-</div>
+<br/>
 
 
-</Space>
-
-
-
-<div
-style={{
-marginTop:8
-}}
+<Tag
+color={
+agent.type==="done"
+?
+"success"
+:
+agent.type==="running"
+?
+"blue"
+:
+"default"
+}
 >
 
 {
-
-agent.status==="done"&&(
-
-<Tag color="success">
-✓ 已完成
-</Tag>
-
-)
-
+agent.type==="done"
+?
+"✓ "
+:
+agent.type==="running"
+?
+"◉ "
+:
+"○ "
 }
 
+{agent.status}
 
-{
-
-agent.status==="running"&&(
-
-<Tag color="processing">
-◉ 分析中
 </Tag>
-
-)
-
-}
-
-
-{
-
-agent.status==="waiting"&&(
-
-<Tag>
-○ 等待
-</Tag>
-
-)
-
-}
 
 
 </div>
 
 
-</Card>
-
-
-{
-index!==agents.length-1&&(
-
-<div
-style={{
-height:25,
-borderLeft:"2px dashed #d9d9d9",
-marginLeft:20
-}}
-/>
-
-)
-
-}
+</div>
 
 
 </div>
-
 
 ))
+
 }
 
 
-</Space>
+</div>
 
 
 </Card>
-
 
 )
 
