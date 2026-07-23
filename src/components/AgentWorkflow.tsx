@@ -27,29 +27,26 @@ export function AgentWorkflow({
 
   const items=steps.map(step=>{
 
-    let icon;
-
     if(step.status==="done"){
-      icon=<CheckCircleOutlined/>;
-    }else if(step.status==="running"){
-      icon=<LoadingOutlined/>;
-    }else{
-      icon=<ClockCircleOutlined/>;
+      return {
+        title:step.name,
+        icon:<CheckCircleOutlined/>,
+        status:"finish" as const
+      };
+    }
+
+    if(step.status==="running"){
+      return {
+        title:step.name,
+        icon:<LoadingOutlined/>,
+        status:"process" as const
+      };
     }
 
     return {
       title:step.name,
-      icon:icon,
-      status:
-      step.status==="done"
-      ?
-      "finish"
-      :
-      step.status==="running"
-      ?
-      "process"
-      :
-      "wait"
+      icon:<ClockCircleOutlined/>,
+      status:"wait" as const
     };
 
   });
