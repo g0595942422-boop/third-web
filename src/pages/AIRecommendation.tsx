@@ -340,16 +340,15 @@ export function AIRecommendation(){
               <Tag color="blue">
                 专业：待分析
               </Tag>
-
               <Tag color="green">
                 技能：待分析
               </Tag>
-
               <Tag color="purple">
-                目标：竞赛提升
+                目标：待分析
               </Tag>
-
-
+              <Tag color="yellow">
+                年级：待分析
+              </Tag>
             </Card>
 
           </Space>
