@@ -5,14 +5,14 @@ import {
   Typography,
   Tag
 } from "antd";
-
 import {
   RobotOutlined,
-  SendOutlined
+  SendOutlined,
+  UserOutlined
 } from "@ant-design/icons";
-
-import { useState } from "react";
-
+import {
+  useState
+} from "react";
 
 export function AgentChat(){
 
@@ -21,18 +21,16 @@ export function AgentChat(){
   const [messages,setMessages]=useState([
     {
       role:"ai",
-      text:"你好，我是你的竞赛规划智能体。我会根据你的专业背景、兴趣方向和目标，为你分析适合参加的竞赛。"
+      text:"你好，我是赛智通AI竞赛智能体。我会根据你的专业背景、兴趣方向和竞赛目标，为你规划适合参加的竞赛。"
     }
   ]);
 
   const [status,setStatus]=useState([
-    "等待输入",
-    "分析用户背景",
-    "匹配竞赛数据库",
-    "评估竞赛价值",
-    "生成参赛方案"
+    "用户画像分析",
+    "竞赛数据库匹配",
+    "竞赛价值评估",
+    "参赛方案生成"
   ]);
-
 
   const handleSend=()=>{
 
@@ -64,13 +62,13 @@ export function AgentChat(){
           arr[index]="✓ "+arr[index];
         }
 
-        index++;
-
         return arr;
+
       });
 
+      index++;
 
-      if(index>=status.length){
+      if(index>=4){
         clearInterval(timer);
       }
 
@@ -94,9 +92,10 @@ export function AgentChat(){
 
       <div
         style={{
-          height:300,
+          height:380,
           overflowY:"auto",
-          marginBottom:20
+          marginBottom:20,
+          padding:10
         }}
       >
 
@@ -106,76 +105,81 @@ export function AgentChat(){
             <div
               key={index}
               style={{
-                marginBottom:15,
-                textAlign:item.role==="user"?"right":"left"
+                display:"flex",
+                justifyContent:
+                  item.role==="user"
+                  ?
+                  "flex-end"
+                  :
+                  "flex-start",
+                marginBottom:18,
+                gap:10
               }}
             >
 
-             <div
-style={{
-display:"flex",
-alignItems:"flex-start",
-gap:10,
-justifyContent:item.role==="user"?"flex-end":"flex-start"
-}}
->
-
-<div
-style={{
-width:36,
-height:36,
-borderRadius:"50%",
-background:item.role==="user"?"#e6f4ff":"#1677ff",
-display:"flex",
-alignItems:"center",
-justifyContent:"center",
-color:item.role==="user"?"#1677ff":"white"
-}}
->
-{
-item.role==="ai"
-?
-<RobotOutlined/>
-:
-<UserOutlined/>
-}
-</div>
+              {
+                item.role==="ai"&&
+                <div
+                  style={{
+                    width:36,
+                    height:36,
+                    borderRadius:"50%",
+                    background:"#1677ff",
+                    color:"#fff",
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"center"
+                  }}
+                >
+                  <RobotOutlined/>
+                </div>
+              }
 
 
-<div
-style={{
-maxWidth:"75%",
-padding:"12px 16px",
-borderRadius:
-item.role==="user"
-?
-"16px 4px 16px 16px"
-:
-"4px 16px 16px 16px",
-background:
-item.role==="user"
-?
-"#e6f4ff"
-:
-"#f6f8fa",
-boxShadow:"0 2px 8px rgba(0,0,0,.04)"
-}}
->
-
-<Typography.Text>
-{item.text}
-</Typography.Text>
-
-</div>
-
-</div>
+              <div
+                style={{
+                  maxWidth:"75%",
+                  padding:"12px 16px",
+                  borderRadius:
+                    item.role==="user"
+                    ?
+                    "16px 4px 16px 16px"
+                    :
+                    "4px 16px 16px 16px",
+                  background:
+                    item.role==="user"
+                    ?
+                    "#e6f4ff"
+                    :
+                    "#f5f5f5"
+                }}
+              >
 
                 <Typography.Text>
-                  {item.role==="ai"?"AI：":"你："}
                   {item.text}
                 </Typography.Text>
 
               </div>
+
+
+              {
+                item.role==="user"&&
+                <div
+                  style={{
+                    width:36,
+                    height:36,
+                    borderRadius:"50%",
+                    background:"#e6f4ff",
+                    color:"#1677ff",
+                    display:"flex",
+                    alignItems:"center",
+                    justifyContent:"center"
+                  }}
+                >
+                  <UserOutlined/>
+                </div>
+              }
+
 
             </div>
 
@@ -206,13 +210,13 @@ boxShadow:"0 2px 8px rgba(0,0,0,.04)"
               {
                 item.startsWith("✓")
                 ?
-                <Tag color="success">{item}</Tag>
+                <Tag color="success">
+                  {item}
+                </Tag>
                 :
-                index===1
-                ?
-                <Tag color="processing">{item}</Tag>
-                :
-                item
+                <Tag color={index===0?"processing":"default"}>
+                  ◉ {item}
+                </Tag>
               }
 
             </div>
@@ -224,23 +228,42 @@ boxShadow:"0 2px 8px rgba(0,0,0,.04)"
 
 
       <Input.TextArea
-        rows={3}
         value={input}
-        onChange={e=>setInput(e.target.value)}
-        placeholder="告诉AI你的专业、兴趣和竞赛目标..."
+        autoSize={{
+          minRows:1,
+          maxRows:4
+        }}
+        onChange={
+          e=>setInput(e.target.value)
+        }
+        onPressEnter={
+          e=>{
+            if(!e.shiftKey){
+              e.preventDefault();
+              handleSend();
+            }
+          }
+        }
+        placeholder="输入你的专业、技能和竞赛目标..."
+        style={{
+          borderRadius:16
+        }}
       />
+
 
       <Button
         type="primary"
         block
         icon={<SendOutlined/>}
         style={{
-          marginTop:10
+          marginTop:10,
+          borderRadius:12
         }}
         onClick={handleSend}
       >
         发送给AI分析
       </Button>
+
 
     </Card>
   );
