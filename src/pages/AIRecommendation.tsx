@@ -5,7 +5,9 @@ import {
   Space,
   Typography,
   Input,
-  Button
+  Button,
+  Progress,
+  Tag
 } from "antd";
 
 import {
@@ -27,36 +29,29 @@ export function AIRecommendation(){
 
   const inputRef=useRef<any>(null);
 
-
   const [analyzing,setAnalyzing]=useState(false);
-
 
 
   const handleSend=()=>{
 
     if(!input.trim()) return;
 
-
     setAnalyzing(true);
-
 
     setTimeout(()=>{
 
       setAnalyzing(false);
 
-    },1500);
-
+    },2000);
 
 
     setInput("");
-
 
     setTimeout(()=>{
 
       inputRef.current?.focus();
 
     },100);
-
 
   };
 
@@ -65,175 +60,255 @@ export function AIRecommendation(){
   return (
 
     <Space
+
       direction="vertical"
-      size={designTokens.spacing.xl}
+
+      size="large"
+
       style={{
         width:"100%"
       }}
+
     >
 
 
-      <Typography.Title level={2}>
-        AI竞赛规划助手
-      </Typography.Title>
+
+      <div>
+
+        <Typography.Title
+
+          level={2}
+
+          style={{
+            marginBottom:4
+          }}
+
+        >
+
+          赛智通 AI竞赛智能体
+
+        </Typography.Title>
+
+
+        <Typography.Text
+
+          type="secondary"
+
+        >
+
+          智能分析竞赛方向，匹配最佳项目，并生成参赛规划
+
+        </Typography.Text>
+
+
+      </div>
+
+
 
 
 
       <Row
-        gutter={[
-          designTokens.spacing.lg,
-          designTokens.spacing.lg
-        ]}
+
+        gutter={24}
+
         align="stretch"
+
       >
 
 
 
-        {/* 左侧 Agent */}
+        {/* 左侧智能体 */}
 
         <Col
+
           xs={24}
+
           md={10}
+
         >
+
+
+          <Space
+
+            direction="vertical"
+
+            size="large"
+
+            style={{
+              width:"100%"
+            }}
+
+          >
+
 
 
           <Card
 
             title={
               <>
-                <RobotOutlined/>
-                {" "}竞赛智能体
+              <RobotOutlined/>
+              {" "}
+              AI Agent 工作台
               </>
             }
 
             style={{
 
-              height:720,
-
               borderRadius:
-                designTokens.borderRadius,
+              designTokens.borderRadius,
 
               boxShadow:
-                designTokens.boxShadow
+              designTokens.boxShadow
 
             }}
 
           >
 
 
-            <Space
 
-              direction="vertical"
+            <Card
 
-              size="large"
+              size="small"
 
               style={{
-                width:"100%"
+                marginBottom:20
               }}
 
             >
 
 
+              <Typography.Text strong>
 
-              <Card
-                size="small"
+                当前任务
+
+              </Typography.Text>
+
+
+
+              <Typography.Paragraph
+
+                type="secondary"
+
               >
 
-                <Typography.Text strong>
-                  当前任务
-                </Typography.Text>
+                根据用户专业背景、兴趣方向，
+                推荐适合参加的竞赛。
+
+              </Typography.Paragraph>
 
 
-                <Typography.Paragraph
-                  style={{
-                    marginTop:10,
-                    marginBottom:0
-                  }}
-                >
+              <Tag color="blue">
 
-                  根据你的专业背景、
-                  兴趣方向以及目标，
-                  推荐最适合参加的竞赛。
+                AI任务运行中
 
-                </Typography.Paragraph>
-
-
-              </Card>
+              </Tag>
 
 
 
-              <AgentWorkflow />
+            </Card>
 
 
 
-              <Card
-                size="small"
-                title="输入需求"
-              >
 
+            <AgentWorkflow/>
 
-                <Input.TextArea
-
-                  ref={inputRef}
-
-                  rows={4}
-
-                  value={input}
-
-                  onChange={
-                    e=>setInput(e.target.value)
-                  }
-
-
-                  placeholder=
-                  "输入你的专业、兴趣和竞赛目标..."
-
-                />
-
-
-
-                <Button
-
-                  type="primary"
-
-                  icon={
-                    <SendOutlined/>
-                  }
-
-                  block
-
-                  style={{
-                    marginTop:12
-                  }}
-
-                  onClick={handleSend}
-
-                >
-
-                  {
-                    analyzing
-                    ?
-                    "AI正在分析..."
-                    :
-                    "发送给AI分析"
-                  }
-
-
-                </Button>
-
-
-              </Card>
-
-
-
-            </Space>
 
 
           </Card>
 
 
 
+
+
+
+          <Card
+
+            title="与智能体交流"
+
+            style={{
+
+              borderRadius:
+              designTokens.borderRadius,
+
+              boxShadow:
+              designTokens.boxShadow
+
+            }}
+
+          >
+
+
+
+            <Typography.Paragraph
+
+              type="secondary"
+
+            >
+
+              输入你的专业、技能和目标，
+              AI会重新规划竞赛路线。
+
+            </Typography.Paragraph>
+
+
+
+
+            <Input.TextArea
+
+              ref={inputRef}
+
+              rows={4}
+
+              value={input}
+
+              onChange={
+                e=>setInput(e.target.value)
+              }
+
+              placeholder="例如：我是经济学专业，想参加AI创新创业竞赛..."
+
+            />
+
+
+
+            <Button
+
+              type="primary"
+
+              block
+
+              icon={
+                <SendOutlined/>
+              }
+
+              style={{
+                marginTop:12
+              }}
+
+              onClick={handleSend}
+
+            >
+
+              {
+                analyzing
+                ?
+                "AI正在分析..."
+                :
+                "发送给AI"
+              }
+
+
+            </Button>
+
+
+          </Card>
+
+
+          </Space>
+
+
         </Col>
+
 
 
 
@@ -243,24 +318,28 @@ export function AIRecommendation(){
         {/* 右侧结果 */}
 
         <Col
+
           xs={24}
+
           md={14}
+
         >
+
 
 
           <Card
 
-            title="AI决策结果"
+            title="AI决策中心"
 
             style={{
 
-              height:720,
+              height:"100%",
 
               borderRadius:
-                designTokens.borderRadius,
+              designTokens.borderRadius,
 
               boxShadow:
-                designTokens.boxShadow
+              designTokens.boxShadow
 
             }}
 
@@ -268,147 +347,100 @@ export function AIRecommendation(){
 
 
 
-            <Typography.Paragraph
-              type="secondary"
-            >
 
-              AI根据你的背景和目标，
-              分析竞赛方向并生成推荐方案。
+          <Typography.Paragraph
 
-            </Typography.Paragraph>
+            type="secondary"
 
+          >
 
+            AI已经完成背景分析，
+            正在根据竞赛数据库生成推荐。
 
+          </Typography.Paragraph>
 
-            <Card
-              size="small"
-              style={{
-                marginBottom:20
-              }}
-            >
 
-              <Typography.Text strong>
-                AI分析状态
-              </Typography.Text>
 
 
-              <br/>
 
-              <Typography.Text>
-                ✓ 已分析个人背景
-              </Typography.Text>
+          <Card
 
+            size="small"
 
-              <br/>
+            title="AI分析状态"
 
+            style={{
+              marginBottom:20
+            }}
 
-              <Typography.Text>
-                ✓ 已匹配竞赛数据库
-              </Typography.Text>
+          >
 
+            <p>
+              ✓ 用户画像分析完成
+            </p>
 
-              <br/>
 
+            <p>
+              ✓ 竞赛数据库匹配完成
+            </p>
 
-              <Typography.Text>
-                ◉ 正在评估竞赛价值
-              </Typography.Text>
 
+            <p>
+              ◉ 正在评估竞赛价值
+            </p>
 
-              <br/>
 
+            <p>
+              ○ 生成参赛方案
+            </p>
 
-              <Typography.Text
-                type="secondary"
-              >
-                ○ 生成参赛方案
-              </Typography.Text>
 
+          </Card>
 
-            </Card>
 
 
 
 
 
-            <Typography.Title
-              level={4}
-            >
+          <Card
 
-              推荐竞赛 TOP4
+            size="small"
 
-            </Typography.Title>
+            title="匹配能力分析"
 
+            style={{
+              marginBottom:20
+            }}
 
+          >
 
+            <Typography.Text>
+              专业匹配
+            </Typography.Text>
 
-            <div
+            <Progress
+              percent={90}
+            />
 
-              style={{
 
-                height:390,
 
-                overflowY:"auto",
+            <Typography.Text>
+              兴趣匹配
+            </Typography.Text>
 
-                paddingRight:8
+            <Progress
+              percent={85}
+            />
 
-              }}
 
-            >
 
+            <Typography.Text>
+              发展价值
+            </Typography.Text>
 
-              <Row
-
-                gutter={[
-                  designTokens.spacing.lg,
-                  designTokens.spacing.lg
-                ]}
-
-              >
-
-
-                {
-
-                  competitions
-                  .slice(0,4)
-                  .map(
-                    competition=>(
-
-
-                    <Col
-
-                      xs={24}
-
-                      sm={12}
-
-                      key={
-                        competition.id
-                      }
-
-                    >
-
-
-                      <CompetitionCard
-
-                        competition={
-                          competition
-                        }
-
-                      />
-
-
-                    </Col>
-
-
-                  ))
-
-                }
-
-
-              </Row>
-
-
-            </div>
+            <Progress
+              percent={88}
+            />
 
 
 
@@ -416,11 +448,78 @@ export function AIRecommendation(){
 
 
 
+
+
+
+
+          <Typography.Title
+
+            level={4}
+
+          >
+
+            推荐竞赛 TOP4
+
+          </Typography.Title>
+
+
+
+
+
+          <Row
+
+            gutter={[16,16]}
+
+          >
+
+          {
+            competitions
+            .slice(0,4)
+            .map(
+
+              competition=>(
+
+                <Col
+
+                  xs={24}
+
+                  sm={12}
+
+                  key={competition.id}
+
+                >
+
+                  <CompetitionCard
+
+                    competition={competition}
+
+                  />
+
+                </Col>
+
+              )
+
+            )
+
+          }
+
+
+          </Row>
+
+
+
+
+
+          </Card>
+
+
         </Col>
 
 
 
+
       </Row>
+
 
 
 
