@@ -6,94 +6,202 @@ import {
   Typography,
   Input,
   Button,
-  Tag,
-  Avatar
+  Avatar,
+  Tag
 } from "antd";
+
 import {
   SendOutlined,
   RobotOutlined,
   UserOutlined
 } from "@ant-design/icons";
+
 import { useRef, useState } from "react";
+
 import { AgentWorkflow } from "../components/AgentWorkflow";
 import { CompetitionCard } from "../components/CompetitionCard";
 import { designTokens } from "../styles/tokens";
 
+type WorkflowStep={
+  name:string;
+  status:string;
+};
+
+type Message={
+  role:"user"|"assistant";
+  content:string;
+};
+
+type Profile={
+  major?:string;
+  grade?:string;
+  skills?:string[];
+  goal?:string;
+};
+
 export function AIRecommendation(){
-  const [input,setInput]=useState("");
+
   const inputRef=useRef<any>(null);
+
+  const [input,setInput]=useState("");
+
   const [loading,setLoading]=useState(false);
-  const [messages,setMessages]=useState([
+
+  const [messages,setMessages]=useState<Message[]>([
     {
       role:"assistant",
-      content:"你好，我是赛智通AI竞赛智能体。请告诉我你的专业、年级、技能和目标，我会帮你规划竞赛方向。"
+      content:"你好，我是赛智通AI竞赛智能体，请告诉我你的专业、年级、技能和竞赛目标。"
     }
   ]);
-  const [workflow,setWorkflow]=useState<any[]>([]);
-  const [profile,setProfile]=useState<any>({});
+
+  const [workflow,setWorkflow]=useState<WorkflowStep[]>([]);
+
+  const [profile,setProfile]=useState<Profile>({});
+
   const [recommendations,setRecommendations]=useState<any[]>([]);
 
+
   const handleSend=async()=>{
-    if(!input.trim())return;
-    const text=input;
+
+    if(!input.trim()) return;
+
+    const userInput=input;
+
+
     setMessages(prev=>[
       ...prev,
       {
         role:"user",
-        content:text
+        content:userInput
       }
     ]);
+
+
     setInput("");
+
     setLoading(true);
+
+
     try{
-      const res=await fetch("http://localhost:8000/chat",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          message:text
+
+      const response=await fetch(
+        "http://localhost:8000/chat",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            message:userInput
+          })
+        }
+      );
+
+
+      const data=await response.json();
+
+
+      setMessages(prev=>[
+        ...prev,
+        {
+          role:"assistant",
+          content:
+          data.answer||
+          "AI分析完成"
+        }
+      ]);
+
+
+      setWorkflow(
+        data.workflow||[]
+      );
+
+
+      setProfile(
+        data.profile||{}
+      );
+
+
+      const formattedRecommendations=
+      (data.recommendations||[])
+      .map(
+        (item:any,index:number)=>({
+          id:item.id||String(index),
+          name:item.name||item.title||"未知竞赛",
+          status:item.status||"推荐",
+          difficulty:item.difficulty||"未知",
+          summary:item.summary||item.description||"",
+          tags:item.tags||[],
+          deadline:item.deadline||"待确认",
+          reason:item.reason||"",
+          officialUrl:item.officialUrl||"#"
         })
-      });
-      const data=await res.json();
+      );
+
+
+      setRecommendations(
+        formattedRecommendations
+      );
+
+
+    }catch(error){
+
       setMessages(prev=>[
         ...prev,
         {
           role:"assistant",
-          content:data.answer||"AI暂时没有返回结果"
+          content:"无法连接智能体服务，请确认后端接口已经启动。"
         }
       ]);
-      setWorkflow(data.workflow||[]);
-      setProfile(data.profile||{});
-      setRecommendations(data.recommendations||[]);
-    }catch(e){
-      setMessages(prev=>[
-        ...prev,
-        {
-          role:"assistant",
-          content:"当前无法连接智能体服务，请检查后端接口。"
-        }
-      ]);
+
     }
+
+
     setLoading(false);
+
+
     setTimeout(()=>{
       inputRef.current?.focus();
     },100);
-  };
 
-  return(
-    <Space direction="vertical" size="large" style={{width:"100%"}}>
+  }
+    return(
+    <Space
+      direction="vertical"
+      size="large"
+      style={{
+        width:"100%"
+      }}
+    >
       <div>
-        <Typography.Title level={2} style={{marginBottom:4}}>
+        <Typography.Title
+          level={2}
+          style={{
+            marginBottom:4
+          }}
+        >
           赛智通 AI竞赛智能体
         </Typography.Title>
         <Typography.Text type="secondary">
-          基于用户画像和智能规划的竞赛推荐 Agent
+          基于用户画像、任务规划和竞赛匹配的智能 Agent
         </Typography.Text>
       </div>
-      <Row gutter={24} align="stretch">
-        <Col xs={24} md={10}>
-          <Space direction="vertical" size="large" style={{width:"100%"}}>
+
+      <Row
+        gutter={24}
+        align="stretch"
+      >
+        <Col
+          xs={24}
+          md={10}
+        >
+          <Space
+            direction="vertical"
+            size="large"
+            style={{
+              width:"100%"
+            }}
+          >
             <Card
               title={
                 <>
@@ -105,88 +213,142 @@ export function AIRecommendation(){
                 boxShadow:designTokens.boxShadow
               }}
             >
-              <Card size="small" style={{marginBottom:16}}>
+              <Card
+                size="small"
+                style={{
+                  marginBottom:16
+                }}
+              >
                 <Typography.Text strong>
                   用户画像
                 </Typography.Text>
+
                 <div style={{marginTop:12}}>
                   <Tag color="blue">
-                    专业：{profile.major||"等待分析"}
+                    专业：
+                    {profile.major||"等待分析"}
                   </Tag>
+
                   <Tag color="green">
-                    年级：{profile.grade||"等待分析"}
+                    年级：
+                    {profile.grade||"等待分析"}
                   </Tag>
                 </div>
-                <div style={{marginTop:8}}>
+
+                <div style={{marginTop:10}}>
                   <Typography.Text type="secondary">
                     技能：
-                    {profile.skills?.join("、")||"等待分析"}
+                    {
+                      profile.skills?.join("、")
+                      ||
+                      "等待分析"
+                    }
                   </Typography.Text>
                 </div>
               </Card>
-              <AgentWorkflow steps={workflow}/>
+
+              <AgentWorkflow
+                steps={workflow}
+              />
+
             </Card>
-                        <Card
+
+
+            <Card
               title="与智能体交流"
               style={{
                 borderRadius:designTokens.borderRadius,
                 boxShadow:designTokens.boxShadow
               }}
             >
-              <div style={{maxHeight:420,overflowY:"auto",marginBottom:16}}>
+
+              <div
+                style={{
+                  maxHeight:350,
+                  overflowY:"auto",
+                  marginBottom:16
+                }}
+              >
+
                 {
-                  messages.map((msg,index)=>(
-                    <div key={index} style={{marginBottom:16}}>
-                      <Space align="start">
-                        <Avatar
-                          icon={
-                            msg.role==="assistant"
-                            ?
-                            <RobotOutlined/>
-                            :
-                            <UserOutlined/>
-                          }
-                        />
-                        <Card
-                          size="small"
-                          style={{
-                            maxWidth:"320px",
-                            background:
-                            msg.role==="assistant"
-                            ?
-                            "#f6f8fa"
-                            :
-                            "#e6f7ff"
-                          }}
-                        >
-                          {msg.content}
-                        </Card>
-                      </Space>
-                    </div>
-                  ))
+                  messages.map(
+                    (message,index)=>(
+                      <div
+                        key={index}
+                        style={{
+                          marginBottom:12
+                        }}
+                      >
+
+                        <Space align="start">
+
+                          <Avatar
+                            icon={
+                              message.role==="assistant"
+                              ?
+                              <RobotOutlined/>
+                              :
+                              <UserOutlined/>
+                            }
+                          />
+
+                          <Card
+                            size="small"
+                          >
+                            {message.content}
+                          </Card>
+
+                        </Space>
+
+                      </div>
+                    )
+                  )
                 }
+
               </div>
+
+
               <Input.TextArea
                 ref={inputRef}
                 rows={4}
                 value={input}
-                onChange={e=>setInput(e.target.value)}
-                placeholder="例如：我是经济学专业大二，会Python，想参加AI创新创业竞赛"
+                onChange={
+                  e=>setInput(e.target.value)
+                }
+                placeholder="例如：我是经济学大二学生，会Python，想参加AI创新创业类竞赛"
               />
+
+
               <Button
                 type="primary"
                 block
                 icon={<SendOutlined/>}
                 loading={loading}
-                style={{marginTop:12}}
+                style={{
+                  marginTop:12
+                }}
                 onClick={handleSend}
               >
-                {loading?"AI正在分析...":"发送给AI"}
+                {
+                  loading
+                  ?
+                  "AI正在分析..."
+                  :
+                  "发送给AI"
+                }
               </Button>
+
             </Card>
+
           </Space>
         </Col>
-        <Col xs={24} md={14}>
+
+
+        <Col
+          xs={24}
+          md={14}
+        >
+
           <Card
             title="AI决策中心"
             style={{
@@ -195,14 +357,22 @@ export function AIRecommendation(){
               boxShadow:designTokens.boxShadow
             }}
           >
-            <Typography.Paragraph type="secondary">
-              智能体会根据用户输入动态生成分析流程、竞赛方向和参赛建议。
+
+            <Typography.Paragraph
+              type="secondary"
+            >
+              智能体会根据用户输入动态执行任务，并生成竞赛推荐方案。
             </Typography.Paragraph>
+
+
             <Card
               size="small"
-              title="Agent运行状态"
-              style={{marginBottom:20}}
+              title="Agent任务状态"
+              style={{
+                marginBottom:20
+              }}
             >
+
               {
                 workflow.length===0
                 ?
@@ -210,48 +380,74 @@ export function AIRecommendation(){
                   等待用户输入，智能体尚未启动。
                 </Typography.Text>
                 :
-                workflow.map((item,index)=>(
-                  <p key={index}>
-                    {
-                      item.status==="done"
-                      ?
-                      "✅"
-                      :
-                      item.status==="running"
-                      ?
-                      "🔵"
-                      :
-                      "⚪"
-                    }
-                    {" "}
-                    {item.name}
-                  </p>
-                ))
+                workflow.map(
+                  (step,index)=>(
+                    <p key={index}>
+                      {
+                        step.status==="done"
+                        ?
+                        "✅"
+                        :
+                        step.status==="running"
+                        ?
+                        "🔵"
+                        :
+                        "⚪"
+                      }
+                      {" "}
+                      {step.name}
+                    </p>
+                  )
+                )
               }
+
             </Card>
-            <Typography.Title level={4}>
+
+
+            <Typography.Title
+              level={4}
+            >
               AI推荐竞赛
             </Typography.Title>
-            <Row gutter={[16,16]}>
+
+
+            <Row
+              gutter={[16,16]}
+            >
+
               {
                 recommendations.length===0
                 ?
                 <Col span={24}>
                   <Typography.Text type="secondary">
-                    等待智能体分析后生成推荐。
+                    等待智能体生成推荐结果。
                   </Typography.Text>
                 </Col>
                 :
-                recommendations.map((item,index)=>(
-                  <Col xs={24} sm={12} key={index}>
-                    <CompetitionCard competition={item}/>
-                  </Col>
-                ))
+                recommendations.map(
+                  item=>(
+                    <Col
+                      xs={24}
+                      sm={12}
+                      key={item.id}
+                    >
+                      <CompetitionCard
+                        competition={item}
+                      />
+                    </Col>
+                  )
+                )
               }
+
             </Row>
+
+
           </Card>
+
         </Col>
+
       </Row>
+
     </Space>
   );
 }
