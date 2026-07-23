@@ -12,9 +12,9 @@ import {
 
 import { designTokens } from "../styles/tokens";
 
-interface WorkflowStep{
+export interface WorkflowStep{
   name:string;
-  status:string;
+  status:"done"|"running"|"wait";
 }
 
 interface AgentWorkflowProps{
@@ -54,17 +54,18 @@ export function AgentWorkflow({
 
   return(
     <Card
-      title="Agent任务流"
+      title="AI Agent 工作流"
       style={{
         borderRadius:designTokens.borderRadius,
         boxShadow:designTokens.boxShadow
       }}
     >
+
       {
         steps.length===0
         ?
         <Typography.Text type="secondary">
-          等待用户输入，智能体将自动生成任务流程。
+          等待用户输入，AI将自动规划任务。
         </Typography.Text>
         :
         <Steps
@@ -73,6 +74,7 @@ export function AgentWorkflow({
           items={items}
         />
       }
+
     </Card>
   );
 }
