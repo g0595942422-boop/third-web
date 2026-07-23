@@ -111,15 +111,64 @@ export function AgentChat(){
               }}
             >
 
-              <div
-                style={{
-                  display:"inline-block",
-                  padding:"10px 14px",
-                  borderRadius:12,
-                  background:item.role==="user"?"#e6f4ff":"#f5f5f5",
-                  maxWidth:"85%"
-                }}
-              >
+             <div
+style={{
+display:"flex",
+alignItems:"flex-start",
+gap:10,
+justifyContent:item.role==="user"?"flex-end":"flex-start"
+}}
+>
+
+<div
+style={{
+width:36,
+height:36,
+borderRadius:"50%",
+background:item.role==="user"?"#e6f4ff":"#1677ff",
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+color:item.role==="user"?"#1677ff":"white"
+}}
+>
+{
+item.role==="ai"
+?
+<RobotOutlined/>
+:
+<UserOutlined/>
+}
+</div>
+
+
+<div
+style={{
+maxWidth:"75%",
+padding:"12px 16px",
+borderRadius:
+item.role==="user"
+?
+"16px 4px 16px 16px"
+:
+"4px 16px 16px 16px",
+background:
+item.role==="user"
+?
+"#e6f4ff"
+:
+"#f6f8fa",
+boxShadow:"0 2px 8px rgba(0,0,0,.04)"
+}}
+>
+
+<Typography.Text>
+{item.text}
+</Typography.Text>
+
+</div>
+
+</div>
 
                 <Typography.Text>
                   {item.role==="ai"?"AI：":"你："}
