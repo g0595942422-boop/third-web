@@ -30,3 +30,14 @@ body { margin: 0; }
   initial-value: 0deg;
   inherits: false;
 }
+
+@keyframes glowSpin {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+/* 加载光波 */
+@keyframes glowSpin {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}

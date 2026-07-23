@@ -126,6 +126,8 @@ export function AIRecommendation() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [typingText, setTypingText] = useState("");
+  const [typingIndex, setTypingIndex] = useState(-1);
 
 const [messages, setMessages] = useState<Message[]>([
     {
