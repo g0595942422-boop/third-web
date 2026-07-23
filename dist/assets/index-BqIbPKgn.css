@@ -1,0 +1,1 @@
+*{box-sizing:border-box}body{margin:0}#root{min-height:100vh}@keyframes loadingPulse{0%,80%,to{opacity:.4;transform:scale(.6)}40%{opacity:1;transform:scale(1)}}
