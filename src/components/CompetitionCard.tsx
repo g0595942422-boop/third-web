@@ -215,7 +215,7 @@ export function CompetitionCard({
         </div>
 
                                 {/* 展开/收起 - 理由超长时显示 */}
-        {competition.reason.length > 40 && (
+        {(
           <span
             onClick={() => setExpanded(!expanded)}
             style={{
