@@ -78,7 +78,7 @@ export function Home() {
             <Typography.Title level={1} style={{ color:'#fff', margin:0, marginBottom: designTokens.spacing.md, fontSize:36, fontWeight:700, letterSpacing:'-0.5px', lineHeight:1.2 }}>
               让 AI 为你找到最适合的竞赛
             </Typography.Title>
-            <Typography.Paragraph style={{ color:'rgba(255,255,255,0.65)', fontSize:15, margin:0, marginBottom: designTokens.spacing.lg, lineHeight:1.7 }}>
+            <Typography.Paragraph style={{ color:'rgba(255,255,255,0.78)', fontSize:15, margin:0, marginBottom: designTokens.spacing.lg, lineHeight:1.7 }}>
               输入你的专业、兴趣和目标，赛智通 AI 将自动分析你的画像，从赛事库中精准匹配竞赛，并生成个性化的参赛规划路线。
             </Typography.Paragraph>
             <div style={{ display:'flex', gap:12 }}>
