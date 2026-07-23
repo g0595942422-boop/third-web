@@ -379,7 +379,7 @@ export function AIRecommendation(){
         >
 
           {
-            competitions.slice(0,4).map(item=>(
+            competitions.slice(0,10).map(item=>(
 
               <div
                 key={item.id}
