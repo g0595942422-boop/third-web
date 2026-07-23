@@ -10,15 +10,17 @@ import { designTokens } from './styles/tokens';
 export default function App() {
   const [activeKey, setActiveKey] = useState('home');
 
-  useEffect(() => {
-    const handleAI = () => {
-      setActiveKey('ai');
-    };
+    const navigate = (key: string) => () => setActiveKey(key);
 
-    window.addEventListener('openAI', handleAI);
+  useEffect(() => {
+    window.addEventListener('openAI', navigate('ai'));
+    window.addEventListener('goMine', navigate('mine'));
+    window.addEventListener('goHome', navigate('home'));
 
     return () => {
-      window.removeEventListener('openAI', handleAI);
+      window.removeEventListener('openAI', navigate('ai'));
+      window.removeEventListener('goMine', navigate('mine'));
+      window.removeEventListener('goHome', navigate('home'));
     };
   }, []);
 
