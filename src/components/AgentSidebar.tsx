@@ -1,141 +1,210 @@
 import {
   Card,
   Typography,
-  Space,
-  Tag
+  Tag,
+  Divider
 } from "antd";
-
 import {
+  RobotOutlined,
   UserOutlined,
-  SearchOutlined,
-  BulbOutlined,
-  CheckCircleOutlined
+  AimOutlined,
+  CodeOutlined,
+  TrophyOutlined
 } from "@ant-design/icons";
-
 import { designTokens } from "../styles/tokens";
-
 
 export function AgentSidebar(){
 
-  const agents=[
-    {
-      icon:<UserOutlined/>,
-      title:"用户画像 Agent",
-      desc:"分析专业背景、兴趣方向、技能情况",
-      status:"已完成",
-      done:true
-    },
-    {
-      icon:<SearchOutlined/>,
-      title:"竞赛检索 Agent",
-      desc:"匹配竞赛数据库，寻找适合项目",
-      status:"已完成",
-      done:true
-    },
-    {
-      icon:<BulbOutlined/>,
-      title:"竞赛评估 Agent",
-      desc:"分析匹配程度和竞赛价值",
-      status:"分析中",
-      done:false
-    },
-    {
-      icon:<CheckCircleOutlined/>,
-      title:"方案生成 Agent",
-      desc:"生成最终竞赛规划建议",
-      status:"等待",
-      done:false
-    }
-  ];
-
-
-  return (
-
+  return(
     <Card
-      title="AI Agent 工作流"
       style={{
         height:"100%",
         borderRadius:designTokens.borderRadius,
         boxShadow:designTokens.boxShadow
       }}
+      bodyStyle={{
+        padding:20
+      }}
     >
 
-      <Space
-        direction="vertical"
-        size="large"
+      <div
         style={{
-          width:"100%"
+          display:"flex",
+          alignItems:"center",
+          gap:12
         }}
       >
 
+        <div
+          style={{
+            width:42,
+            height:42,
+            borderRadius:12,
+            background:"#1677ff",
+            color:"#fff",
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"center",
+            fontSize:20
+          }}
+        >
+          <RobotOutlined/>
+        </div>
 
-      {
-        agents.map((agent,index)=>(
 
-          <div
-            key={index}
+        <div>
+
+          <Typography.Text strong>
+            赛智通 AI Agent
+          </Typography.Text>
+
+          <br/>
+
+          <Typography.Text
+            type="secondary"
             style={{
-              padding:"16px",
-              borderRadius:12,
-              borderLeft:
-                agent.done
-                ?"4px solid #52c41a"
-                :"4px solid #1677ff",
-              background:
-                agent.done
-                ?"rgba(82,196,26,0.05)"
-                :"rgba(22,119,255,0.05)"
+              fontSize:12
             }}
           >
+            竞赛规划智能助手
+          </Typography.Text>
 
-            <Space>
+        </div>
 
-              {agent.icon}
-
-              <Typography.Text strong>
-                {agent.title}
-              </Typography.Text>
-
-            </Space>
+      </div>
 
 
-            <Typography.Paragraph
-              type="secondary"
-              style={{
-                margin:"10px 0"
-              }}
-            >
-
-              {agent.desc}
-
-            </Typography.Paragraph>
+      <Divider/>
 
 
-            <Tag
-              color={
-                agent.done
-                ?"green"
-                :"blue"
-              }
-            >
-
-              {agent.done?"✓ ":"◉ "}
-              {agent.status}
-
-            </Tag>
+      <Typography.Text strong>
+        当前状态
+      </Typography.Text>
 
 
-          </div>
+      <div
+        style={{
+          marginTop:12,
+          padding:12,
+          borderRadius:10,
+          background:"#f6f8fa"
+        }}
+      >
+
+        <Tag color="green">
+          ● 智能体已就绪
+        </Tag>
+
+        <Typography.Paragraph
+          type="secondary"
+          style={{
+            marginTop:10,
+            marginBottom:0
+          }}
+        >
+          等待输入竞赛目标，开始分析。
+        </Typography.Paragraph>
+
+      </div>
 
 
-        ))
-      }
+      <Divider/>
 
 
-      </Space>
+      <Typography.Text strong>
+        用户画像
+      </Typography.Text>
+
+
+      <div
+        style={{
+          marginTop:12
+        }}
+      >
+
+        <ProfileItem
+          icon={<UserOutlined/>}
+          title="专业"
+          value="待分析"
+        />
+
+
+        <ProfileItem
+          icon={<AimOutlined/>}
+          title="竞赛目标"
+          value="待分析"
+        />
+
+
+        <ProfileItem
+          icon={<CodeOutlined/>}
+          title="技能"
+          value="待分析"
+        />
+
+
+        <ProfileItem
+          icon={<TrophyOutlined/>}
+          title="适合方向"
+          value="待推荐"
+        />
+
+
+      </div>
 
 
     </Card>
+  );
+
+}
+
+
+function ProfileItem({
+  icon,
+  title,
+  value
+}:{
+  icon:any;
+  title:string;
+  value:string;
+}){
+
+  return(
+
+    <div
+      style={{
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"space-between",
+        padding:"10px 0"
+      }}
+    >
+
+      <div
+        style={{
+          display:"flex",
+          alignItems:"center",
+          gap:8
+        }}
+      >
+
+        {icon}
+
+        <Typography.Text>
+          {title}
+        </Typography.Text>
+
+      </div>
+
+
+      <Typography.Text
+        type="secondary"
+      >
+        {value}
+      </Typography.Text>
+
+
+    </div>
 
   );
 
