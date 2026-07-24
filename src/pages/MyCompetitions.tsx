@@ -1,95 +1,15 @@
 import { Table, Typography, Tag, Button, message } from 'antd';
-import { useEffect, useState } from 'react';
 
-import {
-  getMyCompetitions,
-  removeMyCompetition
-} from '../services/myCompetitions';
+import { useCompetitions } from '../contexts/CompetitionsContext';
 
 
 export function MyCompetitions() {
 
+  const { myCompetitions, removeCompetition } = useCompetitions();
 
-  const [myCompetitions, setMyCompetitions] = useState(
-    getMyCompetitions()
-  );
-
-
-
-  // 实时监听竞赛变化
-  useEffect(() => {
-
-
-    const updateCompetitions = () => {
-
-      setMyCompetitions(
-        getMyCompetitions()
-      );
-
-    };
-
-
-    // 初次进入读取
-    updateCompetitions();
-
-
-
-    // 浏览器重新获得焦点时刷新
-    window.addEventListener(
-      'focus',
-      updateCompetitions
-    );
-
-
-    // 加入/移除竞赛时实时刷新
-    window.addEventListener(
-      'competitionChange',
-      updateCompetitions
-    );
-
-
-
-    return () => {
-
-
-      window.removeEventListener(
-        'focus',
-        updateCompetitions
-      );
-
-
-      window.removeEventListener(
-        'competitionChange',
-        updateCompetitions
-      );
-
-
-    };
-
-
-  }, []);
-
-
-
-
-
-  const handleRemove = (id:number) => {
-
-
-    removeMyCompetition(id);
-
-
-    // 立即更新当前页面
-    setMyCompetitions(
-      getMyCompetitions()
-    );
-
-
-    message.success(
-      '已移除该竞赛'
-    );
-
-
+  const handleRemove = (id: number) => {
+    removeCompetition(id);
+    message.success('已移除该竞赛');
   };
 
 

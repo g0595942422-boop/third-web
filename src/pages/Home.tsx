@@ -1,19 +1,17 @@
-import { Button, Card, Col, Row, Space, Tag, Typography, Divider } from 'antd';
+import { Button, Card, Col, Row, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
 
 import {
   TrophyOutlined,
   RobotOutlined,
-  RightOutlined,
   ThunderboltOutlined,
   ArrowRightOutlined,
-  TeamOutlined,
-  ExperimentOutlined,
-  OrderedListOutlined,
   FireOutlined,
   RocketOutlined,
 } from '@ant-design/icons';
 
+import { CompetitionCard } from '../components/CompetitionCard';
+import { useNavigation } from '../contexts/NavigationContext';
 import { competitions } from '../services/competitions';
 import { designTokens } from '../styles/tokens';
 
@@ -27,10 +25,6 @@ const CARD_BODY = { padding: '20px 24px' };
 
 const SEC_GAP = { marginBottom: designTokens.spacing.xxl };
 
-function tagColor(v: string): string {
-  const map: Record<string, string> = { '报名中':'#52c41a', '热门':'#fa8c16', '推荐':'#1677ff', '入门':'#52c41a', '进阶':'#fa8c16', '挑战':'#f5222d' };
-  return map[v] || '#1677ff';
-}
 
 function SectionHeader({ icon, title, sub, action }: { icon: React.ReactNode; title: string; sub?: string; action?: React.ReactNode; }) {
   return (
@@ -57,16 +51,14 @@ const WORKFLOW_NODES = [
 // 赛智通首页
 export function Home() {
   const hot = competitions.slice(0,3);
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const { navigateTo } = useNavigation();
     const [aiLoading, setAiLoading] = useState(false);
     const goAI = () => {
       setAiLoading(true);
-      window.dispatchEvent(new Event('openAI'));
+      navigateTo('ai');
       setTimeout(() => setAiLoading(false), 3000);
     };
-    const goMine = () => window.dispatchEvent(new Event('goMine'));
-
-    const isMultiLine = (text: string) => text.length > 27;
+    const goMine = () => navigateTo('mine');
 
     return (
     <div className="fade-in">
@@ -229,40 +221,10 @@ export function Home() {
           title='热门竞赛'
           sub='当前推荐赛事，AI 将根据你的背景自动匹配'
         />
-        <Row gutter={[designTokens.spacing.lg, designTokens.spacing.md]}>
+                <Row gutter={[designTokens.spacing.lg, designTokens.spacing.md]}>
           {hot.map(item => (
             <Col xs={24} md={8} key={item.id}>
-              <Card hoverable style={{ ...CARD_STYLE, height:'100%' }} bodyStyle={CARD_BODY}>
-                <div style={{ display:'flex', flexDirection:'column', height:'100%' }}>
-                  <div style={{ height:32, display:'flex', gap:6, alignItems:'center', marginBottom:4 }}>
-                    <Tag color={tagColor(item.status)} style={{ borderRadius:6, fontSize:12, padding:'2px 10px', margin:0, border:'none', lineHeight:'22px' }}>{item.status}</Tag>
-                    <Tag color={tagColor(item.difficulty)} style={{ borderRadius:6, fontSize:12, padding:'2px 10px', margin:0, border:'none', lineHeight:'22px' }}>{item.difficulty}</Tag>
-                  </div>
-                  <div style={{ height:48, display:'flex', alignItems:'flex-start', marginBottom:4 }}>
-                    <Typography.Text strong style={{ fontSize:16, lineHeight:1.4, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
-                      {item.name}
-                    </Typography.Text>
-                  </div>
-                  <div style={{ minHeight:48, marginBottom:4 }}>
-                    <Typography.Paragraph type='secondary' style={{ fontSize:13, margin:0, lineHeight:1.6 }} ellipsis={expandedId === item.id ? false : { rows:2 }}>{item.summary}</Typography.Paragraph>
-                  </div>
-                  <div style={{ minHeight:28, display:'flex', gap:6, flexWrap:'wrap', marginBottom:4 }}>
-                    {item.tags.map(t => (
-                      <Tag key={t} style={{ borderRadius:4, fontSize:12, padding:'0 10px', lineHeight:'24px', background:'rgba(22,119,255,0.06)', color: designTokens.colorPrimary, border:'1px solid rgba(22,119,255,0.12)', margin:0 }}>{t}</Tag>
-                    ))}
-                  </div>
-                  
-                                    {isMultiLine(item.reason) && (
-                    <div onClick={() => setExpandedId(expandedId === item.id ? null : item.id)} style={{ cursor:'pointer', color: designTokens.colorPrimary, fontSize:12, marginBottom:4, userSelect:'none' }}>
-                      {expandedId === item.id ? '收起详情 ▲' : '展开详情 ▼'}
-                    </div>
-                  )}
-                  <Divider style={{ margin:0 }} />
-                  <div style={{ marginTop:'auto', display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:8 }}>
-                    <Typography.Text type='secondary' style={{ fontSize:12, lineHeight:'22px' }}>截止 {item.deadline}</Typography.Text>
-                  </div>
-                </div>
-              </Card>
+              <CompetitionCard competition={item} showActions={false} />
             </Col>
           ))}
         </Row>

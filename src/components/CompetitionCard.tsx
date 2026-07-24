@@ -1,11 +1,8 @@
 import { Button, Card, Typography, message } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Competition } from '../services/competitions';
-import {
-  addMyCompetition,
-  getMyCompetitions
-} from '../services/myCompetitions';
+import { useCompetitions } from '../contexts/CompetitionsContext';
 
 import { designTokens } from '../styles/tokens';
 import { CompetitionTag } from './CompetitionTag';
@@ -16,6 +13,9 @@ import { CompetitionTag } from './CompetitionTag';
 
 interface CompetitionCardProps {
   competition: Competition;
+  joined?: boolean;
+  onAdd?: () => void;
+  showActions?: boolean;
 }
 
 
@@ -28,104 +28,35 @@ const statusType = {
 
 
 export function CompetitionCard({
-  competition
+  competition,
+  joined,
+  onAdd,
+  showActions = true,
 }: CompetitionCardProps) {
 
-
-
-  const [joined, setJoined] = useState(
-    getMyCompetitions().some(
-      item => item.id === competition.id
-    )
-  );
+  const { isJoined, addCompetition } = useCompetitions();
   const [expanded, setExpanded] = useState(false);
 
 
 
-  // 监听加入/移除竞赛，实时更新按钮状态
-  useEffect(() => {
 
-
-    const updateJoined = () => {
-
-
-      setJoined(
-
-        getMyCompetitions().some(
-          item => item.id === competition.id
-        )
-
-      );
-
-
-    };
-
-
-
-    window.addEventListener(
-      'competitionChange',
-      updateJoined
-    );
-
-
-
-    return () => {
-
-
-      window.removeEventListener(
-        'competitionChange',
-        updateJoined
-      );
-
-
-    };
-
-
-  }, [competition.id]);
-
-
-
-
+  // joined/onAdd 被外部传入时优先使用，否则从 Context 获取
+  const isJoinedVal = joined ?? isJoined(competition.id);
 
   const handleAdd = () => {
 
-
-    if (joined) {
-
-
-      message.info(
-        '该竞赛已经加入我的竞赛'
-      );
-
-
+    if (onAdd) {
+      onAdd();
       return;
-
-
     }
 
+    if (isJoinedVal) {
+      message.info('该竞赛已经加入我的竞赛');
+      return;
+    }
 
-
-    addMyCompetition(
-      competition
-    );
-
-
-
-    setJoined(true);
-
-
-
-    // 通知其他页面更新
-    window.dispatchEvent(
-      new Event('competitionChange')
-    );
-
-
-
-    message.success(
-      '已加入我的竞赛'
-    );
-
+    addCompetition(competition);
+    message.success('已加入我的竞赛');
 
   };
 
@@ -231,26 +162,28 @@ export function CompetitionCard({
           </span>
         )}
 
-        <div style={{ display: 'flex', gap: 8 }}>
-          <Button
-            type="primary"
-            size="small"
-            disabled={joined}
-            onClick={handleAdd}
-            style={{ borderRadius: 8, fontSize: 13 }}
-          >
-            {joined ? '✓ 已加入' : '加入我的竞赛'}
-          </Button>
+                {showActions && (
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Button
+              type="primary"
+              size="small"
+                            disabled={isJoinedVal}
+              onClick={handleAdd}
+              style={{ borderRadius: 8, fontSize: 13 }}
+            >
+              {isJoinedVal ? '✓ 已加入' : '加入我的竞赛'}
+            </Button>
 
-          <Button
-            size="small"
-            href={competition.officialUrl}
-            target="_blank"
-            style={{ borderRadius: 8, fontSize: 13 }}
-          >
-            查看官网
-          </Button>
-        </div>
+            <Button
+              size="small"
+              href={competition.officialUrl}
+              target="_blank"
+              style={{ borderRadius: 8, fontSize: 13 }}
+            >
+              查看官网
+            </Button>
+          </div>
+        )}
       </div>
     </Card>
   );

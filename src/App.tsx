@@ -1,6 +1,8 @@
 import { ConfigProvider, Tabs } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { CompetitionsProvider } from './contexts/CompetitionsContext';
+import { NavigationProvider } from './contexts/NavigationContext';
 import { AppLayout } from './layouts/AppLayout';
 import { AIRecommendation } from './pages/AIRecommendation';
 import { Home } from './pages/Home';
@@ -9,20 +11,6 @@ import { designTokens } from './styles/tokens';
 
 export default function App() {
   const [activeKey, setActiveKey] = useState('home');
-
-    const navigate = (key: string) => () => setActiveKey(key);
-
-  useEffect(() => {
-    window.addEventListener('openAI', navigate('ai'));
-    window.addEventListener('goMine', navigate('mine'));
-    window.addEventListener('goHome', navigate('home'));
-
-    return () => {
-      window.removeEventListener('openAI', navigate('ai'));
-      window.removeEventListener('goMine', navigate('mine'));
-      window.removeEventListener('goHome', navigate('home'));
-    };
-  }, []);
 
   return (
     <ConfigProvider
@@ -33,6 +21,8 @@ export default function App() {
         }
       }}
     >
+            <CompetitionsProvider>
+      <NavigationProvider navigateTo={(key: string) => setActiveKey(key)}>
       <AppLayout>
         <Tabs
           activeKey={activeKey}
@@ -54,8 +44,10 @@ export default function App() {
               children: <MyCompetitions />
             }
           ]}
-        />
+                />
       </AppLayout>
+      </NavigationProvider>
+      </CompetitionsProvider>
     </ConfigProvider>
   );
 }

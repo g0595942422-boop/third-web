@@ -37,13 +37,10 @@ export function addMyCompetition(
   list.push(competition);
 
 
-  localStorage.setItem(
+    localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(list)
   );
-window.dispatchEvent(
-  new Event("competitionChange")
-);
 }
 
 
@@ -61,11 +58,8 @@ export function removeMyCompetition(
   );
 
 
-  localStorage.setItem(
+    localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(newList)
   );
-window.dispatchEvent(
-  new Event("competitionChange")
-);
 }
