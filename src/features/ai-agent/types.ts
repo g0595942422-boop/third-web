@@ -31,9 +31,16 @@ export type AgentStatus =
 
 /** Agent API 响应（后端返回结构） */
 export interface AgentResponse {
-  answer: string;
-  workflow: { name: string; status: "done" | "running" | "wait" }[];
-  recommendations: unknown[];
+  success: boolean;
+  session_id: string;
+  response: {
+    text: string;
+    type: string;
+    files: unknown[];
+    recommendations: unknown[];
+  };
+  state_snapshot: Record<string, unknown>;
+  metadata: Record<string, unknown>;
 }
 
 /** 增强对话消息（带可选元数据） */

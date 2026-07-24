@@ -104,9 +104,7 @@ export function useAgentChat() {
         ...prev,
         {
           role: "assistant",
-          content:
-            result.answer ||
-            "根据你的情况，我推荐关注以下竞赛方向：\n\n1. **AI创新类** — 适合有编程基础的同学\n2. **创新创业类** — 适合有商业想法的团队\n3. **综合实践类** — 适合想全面锻炼能力的同学",
+          content: result.response.text,
         },
       ]);
 
