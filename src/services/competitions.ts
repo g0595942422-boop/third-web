@@ -1,3 +1,5 @@
+/* ===== 类型定义 ===== */
+
 export type CompetitionDifficulty = '入门' | '进阶' | '挑战';
 
 export interface Competition {
@@ -11,6 +13,8 @@ export interface Competition {
   tags: string[];
   status: '报名中' | '热门' | '推荐';
 }
+
+/* ===== Mock 数据 ===== */
 
 export const competitions: Competition[] = [
   {

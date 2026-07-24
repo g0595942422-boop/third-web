@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { extractKeywords } from "../utils/extractKeywords";
 import { recommendCompetitions } from "../utils/recommendCompetitions";
-import { sendMessage } from "../../../services/agent";
+import { sendMessage } from "../services";
 import { competitions } from "../../../services/competitions";
 import type { Message, AgentStep, UserProfile } from "../types";
 

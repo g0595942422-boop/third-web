@@ -1,32 +1,19 @@
 import { request } from "./apiClient";
+import type { AgentResponse } from "../features/ai-agent/types";
 
-export interface WorkflowStep {
-  name: string;
-  status: "done" | "running" | "wait";
-}
-
-export interface AgentResponse {
-  answer: string;
-  workflow: WorkflowStep[];
-  recommendations: unknown[];
-}
+export type { AgentResponse };
 
 export async function sendMessage(
   message: string,
 ): Promise<AgentResponse> {
   try {
-    const data = await request<{
-      answer?: string;
-      message?: string;
-      workflow?: WorkflowStep[];
-      recommendations?: unknown[];
-    }>("/chat", {
+    const data = await request<AgentResponse>("/chat", {
       method: "POST",
       body: { message },
     });
 
     return {
-      answer: data.answer || data.message || "",
+      answer: data.answer || "",
       workflow: data.workflow || [],
       recommendations: data.recommendations || [],
     };
