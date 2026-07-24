@@ -66,7 +66,7 @@ export function Home() {
     };
     const goMine = () => window.dispatchEvent(new Event('goMine'));
 
-    const isMultiLine = (text: string) => text.length > 56;
+    const isMultiLine = (text: string) => text.length > 27;
 
     return (
     <div className="fade-in">
@@ -252,7 +252,7 @@ export function Home() {
                     ))}
                   </div>
                   
-                                    {isMultiLine(item.summary) && (
+                                    {isMultiLine(item.reason) && (
                     <div onClick={() => setExpandedId(expandedId === item.id ? null : item.id)} style={{ cursor:'pointer', color: designTokens.colorPrimary, fontSize:12, marginBottom:4, userSelect:'none' }}>
                       {expandedId === item.id ? '收起详情 ▲' : '展开详情 ▼'}
                     </div>
