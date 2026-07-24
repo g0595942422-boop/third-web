@@ -18,3 +18,26 @@ export interface UserProfile {
   goal: string;
   matched: boolean;
 }
+
+/** Agent 整体运行状态 */
+export type AgentStatus =
+  | "idle"
+  | "analyzing"
+  | "matching"
+  | "evaluating"
+  | "generating"
+  | "done"
+  | "error";
+
+/** Agent API 响应（后端返回结构） */
+export interface AgentResponse {
+  answer: string;
+  workflow: { name: string; status: "done" | "running" | "wait" }[];
+  recommendations: unknown[];
+}
+
+/** 增强对话消息（带可选元数据） */
+export interface AgentMessage extends Message {
+  id?: string;
+  timestamp?: number;
+}

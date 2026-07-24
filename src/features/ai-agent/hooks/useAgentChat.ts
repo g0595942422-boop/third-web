@@ -3,20 +3,7 @@ import { extractKeywords } from "../utils/extractKeywords";
 import { recommendCompetitions } from "../utils/recommendCompetitions";
 import { sendMessage } from "../../../services/agent";
 import { competitions } from "../../../services/competitions";
-import type { Message } from "../types";
-
-interface AgentStep {
-  label: string;
-  status: "wait" | "running" | "done";
-  detail: string;
-}
-
-interface UserProfile {
-  major: string;
-  interests: string[];
-  goal: string;
-  matched: boolean;
-}
+import type { Message, AgentStep, UserProfile } from "../types";
 
 export function useAgentChat() {
   const inputRef = useRef<any>(null);
