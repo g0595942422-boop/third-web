@@ -1,8 +1,7 @@
-import { Button, Card, Typography, message } from 'antd';
+import { Button, Card, Typography } from 'antd';
 import { useState } from 'react';
 
 import { Competition } from '../services/competitions';
-import { useCompetitions } from '../contexts/CompetitionsContext';
 
 import { designTokens } from '../styles/tokens';
 import { CompetitionTag } from './CompetitionTag';
@@ -29,35 +28,15 @@ const statusType = {
 
 export function CompetitionCard({
   competition,
-  joined,
+  joined = false,
   onAdd,
   showActions = true,
 }: CompetitionCardProps) {
 
-  const { isJoined, addCompetition } = useCompetitions();
   const [expanded, setExpanded] = useState(false);
 
-
-
-
-  // joined/onAdd 被外部传入时优先使用，否则从 Context 获取
-  const isJoinedVal = joined ?? isJoined(competition.id);
-
   const handleAdd = () => {
-
-    if (onAdd) {
-      onAdd();
-      return;
-    }
-
-    if (isJoinedVal) {
-      message.info('该竞赛已经加入我的竞赛');
-      return;
-    }
-
-    addCompetition(competition);
-    message.success('已加入我的竞赛');
-
+    onAdd?.();
   };
 
 
@@ -167,11 +146,11 @@ export function CompetitionCard({
             <Button
               type="primary"
               size="small"
-                            disabled={isJoinedVal}
+                            disabled={joined}
               onClick={handleAdd}
               style={{ borderRadius: 8, fontSize: 13 }}
             >
-              {isJoinedVal ? '✓ 已加入' : '加入我的竞赛'}
+              {joined ? '✓ 已加入' : '加入我的竞赛'}
             </Button>
 
             <Button

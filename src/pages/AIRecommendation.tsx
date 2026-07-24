@@ -6,7 +6,8 @@
   Typography,
   Input,
   Button,
-  Tag
+  Tag,
+  message
 } from "antd";
 
 import {
@@ -16,6 +17,7 @@ import {
 } from "@ant-design/icons";
 
 import { CompetitionCard } from "../components/CompetitionCard";
+import { useCompetitions } from "../contexts/CompetitionsContext";
 import { designTokens } from "../styles/tokens";
 import { useAgentChat } from "../features/ai-agent/hooks/useAgentChat";
 import { ChatSuggestions } from "../features/ai-agent/components/ChatSuggestions";
@@ -40,6 +42,7 @@ export function AIRecommendation() {
     handleSuggestionClick,
     recommendedCompetitions,
   } = useAgentChat();
+  const { isJoined, addCompetition } = useCompetitions();
   const { colorPrimary, borderRadius } = designTokens;
 
   return (
@@ -250,7 +253,14 @@ export function AIRecommendation() {
                   AI 推荐 #{index + 1}
                 </div>
               )}
-              <CompetitionCard competition={item} />
+              <CompetitionCard
+                competition={item}
+                joined={isJoined(item.id)}
+                onAdd={() => {
+                  addCompetition(item);
+                  message.success('已加入我的竞赛');
+                }}
+              />
             </div>
           ))}
         </div>

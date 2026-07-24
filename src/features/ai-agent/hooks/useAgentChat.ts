@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { extractKeywords } from "../utils/extractKeywords";
+import { recommendCompetitions } from "../utils/recommendCompetitions";
 import { sendMessage } from "../../../services/agent";
 import { competitions } from "../../../services/competitions";
-import type { Competition } from "../../../services/competitions";
 import type { Message } from "../types";
 
 interface AgentStep {
@@ -153,35 +153,7 @@ export function useAgentChat() {
     processMessage(text);
   }, []);
 
-  const getRecommendedCompetitions = (): Competition[] => {
-    let filtered = competitions;
-
-    if (userProfile.matched) {
-      if (userProfile.major) {
-        filtered = [...filtered].sort((a: Competition, b: Competition) => {
-          const aRelevance = a.tags.some(
-            (t: string) =>
-              t.includes(userProfile.major) ||
-              userProfile.interests.some((i) => t.includes(i)),
-          )
-            ? 1
-            : 0;
-          const bRelevance = b.tags.some(
-            (t: string) =>
-              t.includes(userProfile.major) ||
-              userProfile.interests.some((i) => t.includes(i)),
-          )
-            ? 1
-            : 0;
-          return bRelevance - aRelevance;
-        });
-      }
-    }
-
-    return filtered;
-  };
-
-  const recommendedCompetitions = getRecommendedCompetitions();
+  const recommendedCompetitions = recommendCompetitions(competitions, userProfile);
 
   return {
     input,
